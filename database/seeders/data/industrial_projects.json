@@ -1,0 +1,43 @@
+[
+    {
+      "name": "Đất Công Trình Công Nghiệp",
+      "project_id": 37,
+      "acreage": 29.71,
+      "code": "CN1",
+      "description": "Đây là khu vực chính dành cho xây dựng các nhà máy, xí nghiệp sản xuất công nghiệp, chiếm tỷ trọng lớn nhất trong cụm công nghiệp. Ưu tiên phát triển các ngành công nghiệp điện tử - công nghệ thông tin, cơ khí, sản xuất ô tô, công nghiệp vật liệu mới, hóa dược - mỹ phẩm, dệt may",
+      "price": null,
+      "product_type": 1,
+      "link": "/chi-tiet/dat-cong-trinh-cong-nghiep"
+    },
+    {
+      "name": "Đất Công Trình Phụ Trợ Dịch Vụ Phụ Trợ Công Nghiệp và Sản Xuất Kho Bãi",
+      "project_id": 37,
+      "acreage": 4.34,
+      "code": "CN2",
+      "description": "Khu vực này bao gồm các công trình phụ trợ sản xuất, kho bãi và công trình công cộng. Khu vực được thiết kế để phục vụ hoạt động logistics và lưu trữ hàng hóa, hỗ trợ trực tiếp cho các nhà máy sản xuất trong cụm",
+      "price": null,
+      "product_type": 3,
+      "link": "/chi-tiet/dat-cong-trinh-phu-tro-dich-vu-phu-tro-cong-nghiep-va-san-xuat-kho-bai"
+    },
+    {
+      "name": "Đất Công Trình Công Cộng, Nhà Điều Hành, Ban Quản Lý Cụm Công Nghiệp",
+      "project_id": 37,
+      "acreage": 0.61,
+      "code": "CN3",
+      "description": "Đây là khu vực trung tâm điều hành của cụm công nghiệp. Bao gồm các công trình phục vụ quản lý, điều hành cụm công nghiệp, văn phòng làm việc của ban quản lý, khu vực giao dịch ngân hàng và các dịch vụ tài chính, văn phòng cho thuê",
+      "price": null,
+      "product_type": 4,
+      "link": "/chi-tiet/dat-cong-trinh-cong-cong-nha-dieu-hanh-ban-quan-ly-cum-cong-nghiep"
+    },
+    {
+      "name": "Đất hạ tầng kỹ thuật",
+      "project_id": 37,
+      "acreage": 1.01,
+      "code": "CN4",
+      "description": "Khu vực này dành cho các công trình hạ tầng kỹ thuật đầu mối. Bao gồm hệ thống cấp điện từ trạm biến áp 110kV Nội Bài (công suất ~18.000 kVA), trạm bơm cấp nước (công suất 2.022 m³/ngày đêm), nhà máy xử lý nước thải (công suất 1.250 m³/ngày đêm), hệ thống thông tin viễn thông, trạm biến áp, điểm tập kết rác thải",
+      "price": null,
+      "product_type": 5,
+      "link": "/chi-tiet/dat-ha-tang-ky-thuat"
+    }
+  ]
+  

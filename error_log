@@ -1,0 +1,5 @@
+[29-Aug-2025 17:15:46 UTC] PHP Warning:  require(/home/arplus/trungtamxttmhn/vendor/autoload.php): Failed to open stream: No such file or directory in /home/arplus/trungtamxttmhn/artisan on line 10
+[29-Aug-2025 17:15:46 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/arplus/trungtamxttmhn/vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/arplus/trungtamxttmhn/artisan:10
+Stack trace:
+#0 {main}
+  thrown in /home/arplus/trungtamxttmhn/artisan on line 10

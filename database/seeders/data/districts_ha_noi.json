@@ -1,0 +1,632 @@
+[
+    {
+      "id": 1,
+      "name": "Phường Hoàn Kiếm",
+      "boundary": null
+    },
+    {
+      "id": 2,
+      "name": "Phường Cửa Nam",
+      "boundary": null
+    },
+    {
+      "id": 3,
+      "name": "Phường Ba Đình",
+      "boundary": null
+    },
+    {
+      "id": 4,
+      "name": "Phường Ngọc Hà",
+      "boundary": null
+    },
+    {
+      "id": 5,
+      "name": "Phường Giảng Võ",
+      "boundary": null
+    },
+    {
+      "id": 6,
+      "name": "Phường Hai Bà Trưng",
+      "boundary": null
+    },
+    {
+      "id": 7,
+      "name": "Phường Vĩnh Tuy",
+      "boundary": null
+    },
+    {
+      "id": 8,
+      "name": "Phường Bạch Mai",
+      "boundary": null
+    },
+    {
+      "id": 9,
+      "name": "Phường Đống Đa",
+      "boundary": null
+    },
+    {
+      "id": 10,
+      "name": "Phường Kim Liên",
+      "boundary": null
+    },
+    {
+      "id": 11,
+      "name": "Phường Văn Miếu - Quốc Tử Giám",
+      "boundary": null
+    },
+    {
+      "id": 12,
+      "name": "Phường Láng",
+      "boundary": null
+    },
+    {
+      "id": 13,
+      "name": "Phường Ô Chợ Dừa",
+      "boundary": null
+    },
+    {
+      "id": 14,
+      "name": "Phường Hồng Hà",
+      "boundary": null
+    },
+    {
+      "id": 15,
+      "name": "Phường Lĩnh Nam",
+      "boundary": null
+    },
+    {
+      "id": 16,
+      "name": "Phường Hoàng Mai",
+      "boundary": null
+    },
+    {
+      "id": 17,
+      "name": "Phường Vĩnh Hưng",
+      "boundary": null
+    },
+    {
+      "id": 18,
+      "name": "Phường Tương Mai",
+      "boundary": null
+    },
+    {
+      "id": 19,
+      "name": "Phường Định Công",
+      "boundary": null
+    },
+    {
+      "id": 20,
+      "name": "Phường Hoàng Liệt",
+      "boundary": null
+    },
+    {
+      "id": 21,
+      "name": "Phường Yên Sở",
+      "boundary": null
+    },
+    {
+      "id": 22,
+      "name": "Phường Thanh Xuân",
+      "boundary": null
+    },
+    {
+      "id": 23,
+      "name": "Phường Khương Đình",
+      "boundary": null
+    },
+    {
+      "id": 24,
+      "name": "Phường Phương Liệt",
+      "boundary": null
+    },
+    {
+      "id": 25,
+      "name": "Phường Cầu Giấy",
+      "boundary": null
+    },
+    {
+      "id": 26,
+      "name": "Phường Nghĩa Đô",
+      "boundary": null
+    },
+    {
+      "id": 27,
+      "name": "Phường Yên Hòa",
+      "boundary": null
+    },
+    {
+      "id": 28,
+      "name": "Phường Tây Hồ",
+      "boundary": null
+    },
+    {
+      "id": 29,
+      "name": "Phường Phú Thượng",
+      "boundary": null
+    },
+    {
+      "id": 30,
+      "name": "Phường Tây Tựu",
+      "boundary": null
+    },
+    {
+      "id": 31,
+      "name": "Phường Phú Diễn",
+      "boundary": null
+    },
+    {
+      "id": 32,
+      "name": "Phường Xuân Đỉnh",
+      "boundary": null
+    },
+    {
+      "id": 33,
+      "name": "Phường Đông Ngạc",
+      "boundary": null
+    },
+    {
+      "id": 34,
+      "name": "Phường Thượng Cát",
+      "boundary": null
+    },
+    {
+      "id": 35,
+      "name": "Phường Từ Liêm",
+      "boundary": null
+    },
+    {
+      "id": 36,
+      "name": "Phường Xuân Phương",
+      "boundary": null
+    },
+    {
+      "id": 37,
+      "name": "Phường Tây Mỗ",
+      "boundary": null
+    },
+    {
+      "id": 38,
+      "name": "Phường Đại Mỗ",
+      "boundary": null
+    },
+    {
+      "id": 39,
+      "name": "Phường Long Biên",
+      "boundary": null
+    },
+    {
+      "id": 40,
+      "name": "Phường Bồ Đề",
+      "boundary": null
+    },
+    {
+      "id": 41,
+      "name": "Phường Việt Hưng",
+      "boundary": null
+    },
+    {
+      "id": 42,
+      "name": "Phường Phúc Lợi",
+      "boundary": null
+    },
+    {
+      "id": 43,
+      "name": "Phường Hà Đông",
+      "boundary": null
+    },
+    {
+      "id": 44,
+      "name": "Phường Dương Nội",
+      "boundary": null
+    },
+    {
+      "id": 45,
+      "name": "Phường Yên Nghĩa",
+      "boundary": null
+    },
+    {
+      "id": 46,
+      "name": "Phường Phú Lương",
+      "boundary": null
+    },
+    {
+      "id": 47,
+      "name": "Phường Kiến Hưng",
+      "boundary": null
+    },
+    {
+      "id": 48,
+      "name": "Phường Thanh Liệt",
+      "boundary": null
+    },
+    {
+      "id": 49,
+      "name": "Phường Chương Mỹ",
+      "boundary": null
+    },
+    {
+      "id": 50,
+      "name": "Phường Sơn Tây",
+      "boundary": null
+    },
+    {
+      "id": 51,
+      "name": "Phường Tùng Thiện",
+      "boundary": null
+    },
+    {
+      "id": 52,
+      "name": "Xã Thanh Trì",
+      "boundary": null
+    },
+    {
+      "id": 53,
+      "name": "Xã Đại Thanh",
+      "boundary": null
+    },
+    {
+      "id": 54,
+      "name": "Xã Nam Phù",
+      "boundary": null
+    },
+    {
+      "id": 55,
+      "name": "Xã Ngọc Hồi",
+      "boundary": null
+    },
+    {
+      "id": 56,
+      "name": "Xã Thượng Phúc",
+      "boundary": null
+    },
+    {
+      "id": 57,
+      "name": "Xã Thường Tín",
+      "boundary": null
+    },
+    {
+      "id": 58,
+      "name": "Xã Chương Dương",
+      "boundary": null
+    },
+    {
+      "id": 59,
+      "name": "Xã Hồng Vân",
+      "boundary": null
+    },
+    {
+      "id": 60,
+      "name": "Xã Phú Xuyên",
+      "boundary": null
+    },
+    {
+      "id": 61,
+      "name": "Xã Phượng Dực",
+      "boundary": null
+    },
+    {
+      "id": 62,
+      "name": "Xã Chuyên Mỹ",
+      "boundary": null
+    },
+    {
+      "id": 63,
+      "name": "Xã Đại Xuyên",
+      "boundary": null
+    },
+    {
+      "id": 64,
+      "name": "Xã Thanh Oai",
+      "boundary": null
+    },
+    {
+      "id": 65,
+      "name": "Xã Bình Minh",
+      "boundary": null
+    },
+    {
+      "id": 66,
+      "name": "Xã Tam Hưng",
+      "boundary": null
+    },
+    {
+      "id": 67,
+      "name": "Xã Dân Hòa",
+      "boundary": null
+    },
+    {
+      "id": 68,
+      "name": "Xã Vân Đình",
+      "boundary": null
+    },
+    {
+      "id": 69,
+      "name": "Xã Ứng Thiên",
+      "boundary": null
+    },
+    {
+      "id": 70,
+      "name": "Xã Hòa Xá",
+      "boundary": null
+    },
+    {
+      "id": 71,
+      "name": "Xã Ứng Hòa",
+      "boundary": null
+    },
+    {
+      "id": 72,
+      "name": "Xã Mỹ Đức",
+      "boundary": null
+    },
+    {
+      "id": 73,
+      "name": "Xã Hồng Sơn",
+      "boundary": null
+    },
+    {
+      "id": 74,
+      "name": "Xã Phúc Sơn",
+      "boundary": null
+    },
+    {
+      "id": 75,
+      "name": "Xã Hương Sơn",
+      "boundary": null
+    },
+    {
+      "id": 76,
+      "name": "Xã Phú Nghĩa",
+      "boundary": null
+    },
+    {
+      "id": 77,
+      "name": "Xã Xuân Mai",
+      "boundary": null
+    },
+    {
+      "id": 78,
+      "name": "Xã Trần Phú",
+      "boundary": null
+    },
+    {
+      "id": 79,
+      "name": "Xã Hòa Phú",
+      "boundary": null
+    },
+    {
+      "id": 80,
+      "name": "Xã Quảng Bị",
+      "boundary": null
+    },
+    {
+      "id": 81,
+      "name": "Xã Minh Châu",
+      "boundary": null
+    },
+    {
+      "id": 82,
+      "name": "Xã Quảng Oai",
+      "boundary": null
+    },
+    {
+      "id": 83,
+      "name": "Xã Vật Lại",
+      "boundary": null
+    },
+    {
+      "id": 84,
+      "name": "Xã Cổ Đô",
+      "boundary": null
+    },
+    {
+      "id": 85,
+      "name": "Xã Bất Bạt",
+      "boundary": null
+    },
+    {
+      "id": 86,
+      "name": "Xã Suối Hai",
+      "boundary": null
+    },
+    {
+      "id": 87,
+      "name": "Xã Ba Vì",
+      "boundary": null
+    },
+    {
+      "id": 88,
+      "name": "Xã Yên Bài",
+      "boundary": null
+    },
+    {
+      "id": 89,
+      "name": "Xã Đoài Phương",
+      "boundary": null
+    },
+    {
+      "id": 90,
+      "name": "Xã Phúc Thọ",
+      "boundary": null
+    },
+    {
+      "id": 91,
+      "name": "Xã Phúc Lộc",
+      "boundary": null
+    },
+    {
+      "id": 92,
+      "name": "Xã Hát Môn",
+      "boundary": null
+    },
+    {
+      "id": 93,
+      "name": "Xã Thạch Thất",
+      "boundary": null
+    },
+    {
+      "id": 94,
+      "name": "Xã Hạ Bằng",
+      "boundary": null
+    },
+    {
+      "id": 95,
+      "name": "Xã Tây Phương",
+      "boundary": null
+    },
+    {
+      "id": 96,
+      "name": "Xã Hòa Lạc",
+      "boundary": null
+    },
+    {
+      "id": 97,
+      "name": "Xã Yên Xuân",
+      "boundary": null
+    },
+    {
+      "id": 98,
+      "name": "Xã Quốc Oai",
+      "boundary": null
+    },
+    {
+      "id": 99,
+      "name": "Xã Hưng Đạo",
+      "boundary": null
+    },
+    {
+      "id": 100,
+      "name": "Xã Kiều Phú",
+      "boundary": null
+    },
+    {
+      "id": 101,
+      "name": "Xã Phù Cát",
+      "boundary": null
+    },
+    {
+      "id": 102,
+      "name": "Xã Hoài Đức",
+      "boundary": null
+    },
+    {
+      "id": 103,
+      "name": "Xã Dương Hòa",
+      "boundary": null
+    },
+    {
+      "id": 104,
+      "name": "Xã Sơn Đồng",
+      "boundary": null
+    },
+    {
+      "id": 105,
+      "name": "Xã An Khánh",
+      "boundary": null
+    },
+    {
+      "id": 106,
+      "name": "Xã Đan Phượng",
+      "boundary": null
+    },
+    {
+      "id": 107,
+      "name": "Xã Ô Diên",
+      "boundary": null
+    },
+    {
+      "id": 108,
+      "name": "Xã Liên Minh",
+      "boundary": null
+    },
+    {
+      "id": 109,
+      "name": "Xã Gia Lâm",
+      "boundary": null
+    },
+    {
+      "id": 110,
+      "name": "Xã Thuận An",
+      "boundary": null
+    },
+    {
+      "id": 111,
+      "name": "Xã Bát Tràng",
+      "boundary": null
+    },
+    {
+      "id": 112,
+      "name": "Xã Phù Đổng",
+      "boundary": null
+    },
+    {
+      "id": 113,
+      "name": "Xã Thư Lâm",
+      "boundary": null
+    },
+    {
+      "id": 114,
+      "name": "Xã Đông Anh",
+      "boundary": null
+    },
+    {
+      "id": 115,
+      "name": "Xã Phúc Thịnh",
+      "boundary": null
+    },
+    {
+      "id": 116,
+      "name": "Xã Thiên Lộc",
+      "boundary": null
+    },
+    {
+      "id": 117,
+      "name": "Xã Vĩnh Thanh",
+      "boundary": null
+    },
+    {
+      "id": 118,
+      "name": "Xã Mê Linh",
+      "boundary": null
+    },
+    {
+      "id": 119,
+      "name": "Xã Yên Lãng",
+      "boundary": null
+    },
+    {
+      "id": 120,
+      "name": "Xã Tiến Thắng",
+      "boundary": null
+    },
+    {
+      "id": 121,
+      "name": "Xã Quang Minh",
+      "boundary": null
+    },
+    {
+      "id": 122,
+      "name": "Xã Sóc Sơn",
+      "boundary": null
+    },
+    {
+      "id": 123,
+      "name": "Xã Đa Phúc",
+      "boundary": null
+    },
+    {
+      "id": 124,
+      "name": "Xã Nội Bài",
+      "boundary": null
+    },
+    {
+      "id": 125,
+      "name": "Xã Trung Giã",
+      "boundary": null
+    },
+    {
+      "id": 126,
+      "name": "Xã Kim Anh",
+      "boundary": null
+    }
+  ]
