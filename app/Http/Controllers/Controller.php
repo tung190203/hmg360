@@ -28,22 +28,15 @@ abstract class Controller
     {
         View::share('selectedMainMenu', $this->selectedMainMenu);
         $current_locale = App::getLocale() == config('app.fallback_locale') ? '' : App::getLocale();
+        View::share('current_locale', $current_locale);
+
+        if (request()->routeIs('login') || request()->is('login')) {
+            return;
+        }
 
         //Code dự án
         $setting = Setting::getAllSetting();
-        $top_menu = Menu::getAllMenuLink('top');
-        $main_menu = Menu::getAllMenuLink();
-        $footer_menu = Menu::getAllMenuLink('footer');
-
-        $share = [
-            'top_menu' => $top_menu,
-            'main_menu' => $main_menu,
-            'footer_menu' => $footer_menu,
-        ];
-
-        View::share('share', $share);
         View::share('setting', $setting);
-        View::share('current_locale', $current_locale);
         View::share('nations', Nation::all());
         View::share('project_industries', ProjectIndustries::orderBy('created_at', 'desc')->get());
         View::share('projects', Project::orderBy('created_at', 'desc')->where('status', 'approved')->get());

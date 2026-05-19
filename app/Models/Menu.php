@@ -147,10 +147,10 @@ class Menu extends Model
                         $sub2 = self::getAllMenuLink($type, $menu->id);
                         $v1['children'] = array_merge($sub1, $sub2);
                     } else {
-                        $v1['href'] = ($menu->custom_link != "") ? $menu->custom_link : route('home_page');
+                        $v1['href'] = ($menu->custom_link != "") ? $menu->custom_link : route('backend_dashboard');
                         $v1['type'] = 'custom_link';
                         if ((!str_contains($v1['href'], 'http://') && !str_contains($v1['href'], 'https://')) && $v1['href'] != '#!') {
-                            $v1['href'] = route('home_page') . '/' . $v1['href'];
+                            $v1['href'] = url($v1['href']);
                         }
                         $v1['children'] = self::getAllMenuLink($type, $menu->id);
                     }

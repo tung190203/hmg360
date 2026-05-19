@@ -12,8 +12,6 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
 //        $middleware->redirectGuestsTo('/backend/login');
-        $middleware->append(\App\Http\Middleware\TrackVisits::class);
-        $middleware->append(\App\Http\Middleware\LogSiteVisitor::class);
         $middleware->encryptCookies(except: [
             'ckCsrfToken',
         ]);

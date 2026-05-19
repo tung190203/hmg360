@@ -316,11 +316,7 @@ class Post extends Model
 
     public static function makeOptionColumnButton(): array
     {
-        $options = [
-            'view' => [
-                'route' => 'post_detail',
-            ]
-        ];
+        $options = [];
 
         foreach (['edit', 'delete', 'clone'] as $action) {
             if (Gate::allows('post/' . $action)) {

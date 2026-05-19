@@ -4,6 +4,7 @@ namespace App\Libs;
 
 use App\Models\Setting;
 use Mail;
+use Illuminate\Support\Facades\Route;
 
 class Util
 {
@@ -42,7 +43,7 @@ class Util
         if (!$slug) {
             return '#!';//route('product_all');
         } else {
-            return route('category', $slug);
+            return Route::has('category') ? route('category', $slug) : '#!';
         }
     }
 
@@ -51,7 +52,7 @@ class Util
         if (!$page) {
             return '';
         } else {
-            return route('page_content', $page->slug);
+            return Route::has('page_content') ? route('page_content', $page->slug) : '#!';
         }
     }
 
@@ -60,7 +61,7 @@ class Util
         if (!$post) {
             return '';
         } else {
-            return route('post_detail', ['slug' => $post->slug, 'id' => $post->id]);
+            return Route::has('post_detail') ? route('post_detail', ['slug' => $post->slug, 'id' => $post->id]) : '#!';
         }
     }
 
@@ -69,7 +70,7 @@ class Util
         if (!$investment_guide) {
             return '';
         } else {
-            return route('investment_guide_detail', ['slug' => $investment_guide->slug, 'id' => $investment_guide->id]);
+            return Route::has('investment_guide_detail') ? route('investment_guide_detail', ['slug' => $investment_guide->slug, 'id' => $investment_guide->id]) : '#!';
         }
     }
 
@@ -78,7 +79,7 @@ class Util
         if (!$store) {
             return '';
         } else {
-            return route('store_detail', ['slug' => $store->slug]);
+            return Route::has('store_detail') ? route('store_detail', ['slug' => $store->slug]) : '#!';
         }
     }
 
@@ -87,7 +88,7 @@ class Util
         if (!$product) {
             return '';
         } else {
-            return route('product_detail', $product->slug);
+            return Route::has('product_detail') ? route('product_detail', $product->slug) : '#!';
         }
     }
 

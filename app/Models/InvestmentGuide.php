@@ -317,11 +317,7 @@ class InvestmentGuide extends Model
 
     public static function makeOptionColumnButton(): array
     {
-        $options = [
-            'view' => [
-                'route' => 'investment_guide_detail',
-            ]
-        ];
+        $options = [];
 
         foreach (['edit', 'delete', 'clone'] as $action) {
             if (Gate::allows('investment_guide/' . $action)) {

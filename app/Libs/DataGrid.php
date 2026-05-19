@@ -206,7 +206,9 @@ class DataGrid
 
         if ($view) {
             $route = data_get($view, 'route', '');
-            if ($route == 'post_detail') {
+            if (!$route || !\Illuminate\Support\Facades\Route::has($route)) {
+                $link = '#!';
+            } elseif ($route == 'post_detail') {
                 $link = route($route, ['slug' => $value->slug, 'id' => $value->id]);
             }elseif ($route == 'investment_guide_detail') {
                 $link = route($route, ['slug' => $value->slug, 'id' => $value->id]);

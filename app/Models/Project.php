@@ -252,11 +252,7 @@ class Project extends Model
 
     public static function makeOptionColumnButton(): array
     {
-        $options = [
-            'view' => [
-                'route' => 'project_detail',
-            ]
-        ];
+        $options = [];
 
         foreach (['edit', 'delete'] as $action) {
             if (Gate::allows('project/' . $action)) {

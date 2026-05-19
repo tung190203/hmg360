@@ -10,11 +10,6 @@
         </li>
     </ul>
     <ul class="navbar-nav ml-auto align-items-center">
-        <li class="nav-item">
-            <a class="nav-link d-flex align-items-center" href="{{ route('home_page') }}" target="_blank" title="Xem website">
-                <i class="fas fa-globe-americas mr-1"></i> Xem website
-            </a>
-        </li>
         <li class="nav-item dropdown">
             <a class="nav-link d-flex align-items-center" data-toggle="dropdown" href="#!" title="Profiles" style="height: 100%;">
                 <i class="fas fa-th-large"></i>

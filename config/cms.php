@@ -3,10 +3,10 @@
 return [
     'prefix_admin' => env('PREFIX_ADMIN', 'backend'),
     'logo' => [
-        'lg' => '<b>Pro</b>CMS',
-        'mini' => '<b>CMS</b>',
+        'lg' => '<b>HMG360</b>',
+        'mini' => '<b>HMG</b>',
     ],
-    'name' => 'ProCMS',
+    'name' => 'HMG360',
     'version' => '4.0',
     'backend_module' => [
         'contents' => [
