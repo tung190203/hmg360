@@ -16,7 +16,19 @@ return Application::configure(basePath: dirname(__DIR__))
             'ckCsrfToken',
         ]);
         $middleware->validateCsrfTokens(
-            except: ['ckfinder/*', 'ttxt/webhook']
+            except: ['ckfinder/*']
+        );
+        $middleware->alias([
+            'active.user' => \App\Http\Middleware\EnsureActiveUser::class,
+            'platform.owner' => \App\Http\Middleware\EnsurePlatformOwner::class,
+            'tenant.organizer' => \App\Http\Middleware\EnsureTenantOrganizer::class,
+            'tenant.db' => \App\Http\Middleware\UseTenantDatabase::class,
+            'module.enabled' => \App\Http\Middleware\EnsureModuleEnabled::class,
+            'permission' => \App\Http\Middleware\EnsurePermission::class,
+        ]);
+        $middleware->prependToPriorityList(
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\UseTenantDatabase::class
         );
     })
     ->withExceptions(function (Exceptions $exceptions) {

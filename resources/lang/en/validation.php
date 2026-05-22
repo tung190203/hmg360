@@ -1,6 +1,24 @@
 <?php
 
 return [
+    'required' => ':attribute is required.',
+    'required_if' => ':attribute is required when :other is :value.',
+    'string' => ':attribute is invalid.',
+    'integer' => ':attribute must be an integer.',
+    'boolean' => ':attribute must be true or false.',
+    'email' => ':attribute must be a valid email address.',
+    'min' => [
+        'string' => ':attribute must be at least :min characters.',
+        'numeric' => ':attribute must be at least :min.',
+    ],
+    'max' => [
+        'string' => ':attribute must not exceed :max characters.',
+        'numeric' => ':attribute must not exceed :max.',
+    ],
+    'unique' => ':attribute has already been taken.',
+    'exists' => ':attribute is invalid.',
+    'in' => ':attribute is invalid.',
+
     // Name
     'name.required' => 'Please enter your full name',
     'name.string' => 'Full name is invalid',
@@ -37,4 +55,19 @@ return [
 
     // Avatar
     'avatar.string' => 'Avatar is invalid',
+
+    'attributes' => [
+        'name' => 'Tenant name',
+        'slug' => 'Slug',
+        'status' => 'Status',
+        'database.driver' => 'Driver',
+        'database.host' => 'Host',
+        'database.port' => 'Port',
+        'database.database_name' => 'Database name',
+        'database.username' => 'Username',
+        'database.password' => 'Password',
+        'organizer.name' => 'Organizer name',
+        'organizer.email' => 'Organizer email',
+        'organizer.password' => 'Organizer password',
+    ],
 ];

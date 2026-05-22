@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Project;
-
 function getDataVrtour($_url)
 {
     $ch             = curl_init();

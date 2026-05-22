@@ -23,7 +23,7 @@ class CKFinder
      */
     public function __construct(string $userDirectory)
     {
-        $this->hashedDirectory = sha1($userDirectory);
+        $this->hashedDirectory = sha1('ckfinder-user:' . $userDirectory);
     }
 
     /**
@@ -31,11 +31,17 @@ class CKFinder
      */
     protected function configureBackend()
     {
+        if (! is_dir($this->generateRootPath())) {
+            mkdir($this->generateRootPath(), 0755, true);
+        }
+
         return [
             'name'               => 'default',
             'adapter'            => 'local',
             'baseUrl'            => $this->generateBaseUrl(),
             'root'               => $this->generateRootPath(),
+            'chmodFiles'         => 0644,
+            'chmodFolders'       => 0755,
             'filesystemEncoding' => 'UTF-8',
         ];
     }
@@ -47,7 +53,7 @@ class CKFinder
      */
     protected function generateBaseUrl(): string
     {
-        return "/storage/{$this->hashedDirectory}";
+        return "/storage/user-files/{$this->hashedDirectory}/";
     }
 
     /**
@@ -57,7 +63,7 @@ class CKFinder
      */
     protected function generateRootPath(): string
     {
-        return storage_path("app/public/{$this->hashedDirectory}");
+        return storage_path("app/public/user-files/{$this->hashedDirectory}");
     }
 
     /**

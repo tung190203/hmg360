@@ -2,84 +2,173 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
-use ZipArchive;
+use Spatie\Activitylog\Models\Activity;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
 
 class LogExportService
 {
-    /**
-     * Export logs to a password-protected zip file.
-     *
-     * @param int|null $months Number of months to export (null for all)
-     * @param bool $olderThan If true, export logs older than $months. If false, export logs within the last $months.
-     * @param string|null $password
-     * @param string $format 'csv' or 'excel'
-     * @return array|null
-     */
-    public function exportToZip($months = 3, $olderThan = true, $password = null, $format = 'csv')
+    protected string $exportDirectory;
+
+    public function __construct()
     {
-        $dateStr = now()->format('Y_m_d_His');
-        $extension = ($format === 'excel') ? 'xlsx' : 'csv';
-        $fileName = "logs_export_{$dateStr}";
-        $dataFileName = "{$fileName}.{$extension}";
-        $zipFileName = "{$fileName}.zip";
-        
-        $password = $password ?: env('LOG_ROTATE_PASSWORD', 'Log@2025');
+        $this->exportDirectory = storage_path('app/exports');
 
-        $storagePath = storage_path('app/private/logs_archive');
-        if (!File::exists($storagePath)) {
-            File::makeDirectory($storagePath, 0755, true);
+        if (!File::exists($this->exportDirectory)) {
+            File::makeDirectory($this->exportDirectory, 0755, true);
+        }
+    }
+
+    /**
+     * Export activity logs to a zipped file.
+     *
+     * @param int $months
+     * @param bool $recentOnly
+     * @param string|null $password
+     * @param string $format
+     * @return array|false
+     */
+    public function exportToZip(int $months = 3, bool $recentOnly = false, ?string $password = null, string $format = 'csv')
+    {
+        $query = Activity::query()->orderBy('created_at', 'desc');
+
+        if ($months > 0) {
+            $query->where('created_at', '>=', now()->subMonths($months));
         }
 
-        $dataPath = $storagePath . '/' . $dataFileName;
-        $zipPath = $storagePath . '/' . $zipFileName;
+        $activities = $query->get();
 
-        // Use ActivityLogExport for data generation
-        $export = new \App\Exports\ActivityLogExport($months, $olderThan);
-        
-        // Quick check if there is data before proceeding
-        if ($export->collection()->isEmpty()) {
-            return null;
+        if ($activities->isEmpty()) {
+            return false;
         }
 
-        try {
-            if ($format === 'excel') {
-                \Maatwebsite\Excel\Facades\Excel::store($export, 'logs_archive/' . $dataFileName, 'local');
-            } else {
-                // For CSV, we also use Excel package as it handles BOM and encoding better than manual fputcsv in some cases
-                \Maatwebsite\Excel\Facades\Excel::store($export, 'logs_archive/' . $dataFileName, 'local', \Maatwebsite\Excel\Excel::CSV);
-            }
-        } catch (\Exception $e) {
-            Log::error('Export failed: ' . $e->getMessage());
-            return null;
+        $format = strtolower($format);
+        $allowedFormats = ['csv', 'excel', 'xlsx'];
+        if (!in_array($format, $allowedFormats, true)) {
+            $format = 'csv';
         }
 
-        if (!File::exists($dataPath)) {
-            return null;
-        }
+        $timeSuffix = now()->format('Ymd_His');
+        $baseName = "activity_logs_{$timeSuffix}";
+        $exportFileName = $format === 'excel' || $format === 'xlsx' ? "{$baseName}.xlsx" : "{$baseName}.csv";
+        $exportFilePath = $this->exportDirectory . DIRECTORY_SEPARATOR . $exportFileName;
+        $zipFileName = "{$baseName}.zip";
+        $zipFilePath = $this->exportDirectory . DIRECTORY_SEPARATOR . $zipFileName;
 
-        // We don't easily know the count without querying again or modifying Export class, 
-        // but for now let's just proceed if file exists and has size
-        if (File::size($dataPath) < 100) { // Very small file might be empty (just headers)
-            // Optional: check if count is actually 0. For now just continue.
-        }
-
-        $zip = new ZipArchive();
-        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
-            $zip->addFile($dataPath, $dataFileName);
-            if (method_exists($zip, 'setEncryptionName')) {
-                $zip->setEncryptionName($dataFileName, ZipArchive::EM_AES_256, $password);
-            }
-            $zip->close();
-        }
-
-        File::delete($dataPath);
+        $rows = $this->buildRows($activities);
+        $this->writeExportFile($exportFilePath, $rows, $format);
+        $this->createZip($zipFilePath, $exportFilePath, $password);
 
         return [
-            'path' => $zipPath,
+            'path' => $zipFilePath,
             'name' => $zipFileName,
-            'count' => 'N/A' // Count is harder to get now, but let's keep it simple
         ];
+    }
+
+    protected function buildRows($activities): array
+    {
+        $rows = [];
+        $rows[] = [
+            'ID',
+            'Log Name',
+            'Description',
+            'Subject Type',
+            'Subject ID',
+            'Causer Type',
+            'Causer ID',
+            'Event',
+            'Properties',
+            'Created At',
+            'Updated At',
+        ];
+
+        foreach ($activities as $activity) {
+            $properties = $activity->properties;
+            if ($properties instanceof \Illuminate\Support\Collection) {
+                $properties = $properties->toJson(JSON_UNESCAPED_UNICODE);
+            } elseif (is_array($properties) || is_object($properties)) {
+                $properties = json_encode($properties, JSON_UNESCAPED_UNICODE);
+            } else {
+                $properties = (string) $properties;
+            }
+
+            $rows[] = [
+                $activity->id,
+                $activity->log_name,
+                $activity->description,
+                $activity->subject_type,
+                $activity->subject_id,
+                $activity->causer_type,
+                $activity->causer_id,
+                $activity->event,
+                $properties,
+                optional($activity->created_at)->format('Y-m-d H:i:s'),
+                optional($activity->updated_at)->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        return $rows;
+    }
+
+    protected function writeExportFile(string $filePath, array $rows, string $format): void
+    {
+        if ($format === 'csv') {
+            $handle = fopen($filePath, 'w');
+            if ($handle === false) {
+                throw new \RuntimeException("Không thể tạo file xuất dữ liệu: {$filePath}");
+            }
+
+            foreach ($rows as $row) {
+                fputcsv($handle, $row);
+            }
+
+            fclose($handle);
+            return;
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        foreach ($rows as $rowIndex => $row) {
+            foreach ($row as $colIndex => $value) {
+                $sheet->setCellValueByColumnAndRow($colIndex + 1, $rowIndex + 1, $value);
+            }
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($filePath);
+    }
+
+    protected function createZip(string $zipPath, string $sourceFilePath, ?string $password = null): void
+    {
+        if (File::exists($zipPath)) {
+            File::delete($zipPath);
+        }
+
+        $zip = new \ZipArchive();
+        if ($zip->open($zipPath, \ZipArchive::CREATE) !== true) {
+            throw new \RuntimeException("Không thể tạo file ZIP: {$zipPath}");
+        }
+
+        $fileName = basename($sourceFilePath);
+        $zip->addFile($sourceFilePath, $fileName);
+
+        if ($password && method_exists($zip, 'setPassword')) {
+            $zip->setPassword($password);
+            if (method_exists($zip, 'setEncryptionName') && defined('ZipArchive::EM_AES_256')) {
+                $zip->setEncryptionName($fileName, \ZipArchive::EM_AES_256);
+            }
+        }
+
+        $zip->close();
+
+        // Delete the original export file after creating the ZIP
+        if (File::exists($sourceFilePath)) {
+            File::delete($sourceFilePath);
+        }
     }
 }

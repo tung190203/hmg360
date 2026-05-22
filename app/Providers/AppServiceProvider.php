@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -43,6 +44,8 @@ class AppServiceProvider extends ServiceProvider
 
         App::setLocale($locale);
 
+        $this->registerTenantModuleViews();
+
         $locale = $locale == config('app.fallback_locale') ? '' : $locale;
         // Tự động thêm prefix locale cho tất cả route
         Route::macro('localized', function ($callback) use ($availableLocales, $locale) {
@@ -50,5 +53,41 @@ class AppServiceProvider extends ServiceProvider
                 $callback();
             })->where(['locale' => implode('|', $availableLocales)]);
         });
+    }
+
+    private function registerTenantModuleViews(): void
+    {
+        foreach ($this->tenantModuleViewPaths() as $viewsPath) {
+            $modulePath = dirname($viewsPath, 2);
+            $manifestPath = $modulePath . '/module.php';
+            $manifest = is_file($manifestPath) ? require $manifestPath : [];
+            $relativePath = trim(str_replace(app_path('TenantModules'), '', $modulePath), DIRECTORY_SEPARATOR);
+            $namespace = $manifest['view_namespace'] ?? 'tenant-' . Str::slug(str_replace(DIRECTORY_SEPARATOR, '-', $relativePath));
+
+            $this->loadViewsFrom($viewsPath, $namespace);
+        }
+    }
+
+    private function tenantModuleViewPaths(): array
+    {
+        $root = app_path('TenantModules');
+
+        if (! is_dir($root)) {
+            return [];
+        }
+
+        $paths = [];
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($root, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($iterator as $item) {
+            if ($item->isDir() && $item->getFilename() === 'views' && basename($item->getPath()) === 'Resources') {
+                $paths[] = $item->getPathname();
+            }
+        }
+
+        return $paths;
     }
 }

@@ -2,164 +2,76 @@
 
 namespace App\Libs;
 
-use App\Models\Setting;
-use Mail;
-use Illuminate\Support\Facades\Route;
-
 class Util
 {
-    public static function makeHTMLOptions($_arr, $sk = 0, $flag1 = 0, $flag2 = 0, $istext = 0)
+    public static function getFileType(?string $path): string
     {
-        $html = "";
-        if (is_array($_arr)) {
-            foreach ($_arr as $k => $v) {
-                $value = $k;
-                $option = $v;
-                if ($flag2 == 1) {
-                    $value = $option;
-                }
-                if ($flag1 == 0) {
-                    $selected = ($value == $sk) ? "selected" : "";
+        $extension = strtolower(pathinfo((string) $path, PATHINFO_EXTENSION));
+
+        return match ($extension) {
+            'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp' => 'image',
+            'pdf' => 'pdf',
+            default => 'file',
+        };
+    }
+
+    /**
+     * Build HTML <option> tags from an array.
+     *
+     * Usage:
+     *   Util::makeHTMLOptions($items, $selectedValue);
+     *   Util::makeHTMLOptions($items, $selectedValue, $valueKey, $labelKey);
+     *
+     * @param array $options
+     * @param mixed $selected
+     * @param mixed $valueKey
+     * @param mixed $labelKey
+     * @param mixed $unused
+     * @return string
+     */
+    public static function makeHTMLOptions(array $options, $selected = null, $valueKey = null, $labelKey = null, $unused = null): string
+    {
+        $selected = is_array($selected) ? $selected : (string) $selected;
+        $html = '';
+
+        foreach ($options as $key => $value) {
+            if (is_array($value) || is_object($value)) {
+                if ($valueKey !== null && is_string($valueKey)) {
+                    $optionValue = is_array($value)
+                        ? ($value[$valueKey] ?? $key)
+                        : ($value->{$valueKey} ?? $key);
                 } else {
-                    $selected = ($option == $sk) ? "selected" : "";
+                    $optionValue = $key;
                 }
-                $html .= "<option value='$value' $selected >" . $option . "</option>";
-                if ($selected == 'selected' && $istext == 1) {
-                    return str_replace("|__", "", $option);
+
+                if ($labelKey !== null && is_string($labelKey)) {
+                    $optionLabel = is_array($value)
+                        ? ($value[$labelKey] ?? $optionValue)
+                        : ($value->{$labelKey} ?? $optionValue);
+                } else {
+                    $optionLabel = is_array($value)
+                        ? ($value['label'] ?? $optionValue)
+                        : ($value->label ?? $optionValue);
                 }
+            } else {
+                $optionValue = $key;
+                $optionLabel = $value;
             }
-            if ($istext == 1) {
-                return "";
-            }
-            return $html;
-        } else {
-            return "";
-        }
-    }
 
-    public static function url_category($category): string
-    {
-        $slug = data_get($category, 'slug');
-        if (!$slug) {
-            return '#!';//route('product_all');
-        } else {
-            return Route::has('category') ? route('category', $slug) : '#!';
-        }
-    }
+            $optionValue = (string) $optionValue;
+            $optionLabel = (string) $optionLabel;
+            $selectedAttribute = ((is_array($selected) && in_array($optionValue, $selected, true)) || (!is_array($selected) && $optionValue === $selected))
+                ? ' selected'
+                : '';
 
-    public static function url_page($page): string
-    {
-        if (!$page) {
-            return '';
-        } else {
-            return Route::has('page_content') ? route('page_content', $page->slug) : '#!';
-        }
-    }
-
-    public static function url_post($post): string
-    {
-        if (!$post) {
-            return '';
-        } else {
-            return Route::has('post_detail') ? route('post_detail', ['slug' => $post->slug, 'id' => $post->id]) : '#!';
-        }
-    }
-
-    public static function url_investment($investment_guide): string
-    {
-        if (!$investment_guide) {
-            return '';
-        } else {
-            return Route::has('investment_guide_detail') ? route('investment_guide_detail', ['slug' => $investment_guide->slug, 'id' => $investment_guide->id]) : '#!';
-        }
-    }
-
-    public static function url_store($store): string
-    {
-        if (!$store) {
-            return '';
-        } else {
-            return Route::has('store_detail') ? route('store_detail', ['slug' => $store->slug]) : '#!';
-        }
-    }
-
-    public static function url_product($product): string
-    {
-        if (!$product) {
-            return '';
-        } else {
-            return Route::has('product_detail') ? route('product_detail', $product->slug) : '#!';
-        }
-    }
-
-
-    public static function sendEmail($template, $data, $subject, $to, $cc = []): void
-    {
-        if ($template && is_array($data) && $subject && $to) {
-            Mail::send($template, $data, function ($message) use ($to, $cc, $subject) {
-                $message->to($to)->cc($cc)->subject($subject);
-            });
-        }
-    }
-
-    public static function maskInfo($str)
-    {
-        $length = strlen($str);
-        if ($length < 3) {
-            return $str;
+            $html .= sprintf(
+                '<option value="%s"%s>%s</option>',
+                htmlspecialchars($optionValue, ENT_QUOTES, 'UTF-8'),
+                $selectedAttribute,
+                htmlspecialchars($optionLabel, ENT_QUOTES, 'UTF-8')
+            );
         }
 
-        return substr($str, 0, $length - 3) . '***';
-    }
-
-
-    public static function limitContentWords($content = '', $limit = 100): string
-    {
-        if (!$content) {
-            return '';
-        }
-
-        $plainText = strip_tags($content);
-
-        $words = preg_split('/\s+/', $plainText, -1, PREG_SPLIT_NO_EMPTY);
-
-        if (count($words) > $limit) {
-            $limitedWords = array_slice($words, 0, $limit);
-            $limitedContent = implode(' ', $limitedWords);
-            $limitedContent .= '...';
-            return $limitedContent;
-        } else {
-            return $content;
-        }
-    }
-
-    public static function getFileType($file_path): string
-    {
-        $extension = strtolower(pathinfo($file_path, PATHINFO_EXTENSION));
-
-        $image_extensions = ['jpg', 'jpeg', 'png', 'gif'];
-
-        if (in_array($extension, $image_extensions)) {
-            return 'image';
-        } elseif ($extension === 'pdf') {
-            return 'pdf';
-        }
-
-        return 'unknown';
-    }
-
-    public static function isEndProgram(): bool
-    {
-        $setting = Setting::getAllSetting();
-
-        if (!empty($setting['is_end_program'])) {
-            return true;
-        }
-
-        if (time() >= 1737590400) {
-            return true;
-        }
-
-        return false;
+        return $html;
     }
 }

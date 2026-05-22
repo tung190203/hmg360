@@ -14,20 +14,20 @@
             <a class="nav-link d-flex align-items-center" data-toggle="dropdown" href="#!" title="Profiles" style="height: 100%;">
                 <i class="fas fa-th-large"></i>
             </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <div class="dropdown-menu dropdown-menu-right profile-dropdown">
                 <a href="#!" class="dropdown-item" data-toggle="modal" data-target="#adminProfileModal">
-                    <div class="media align-items-center">
+                    <div class="media align-items-center profile-dropdown__media">
                         <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('backend_assets/images/logo.png') }}"
                             alt="User Avatar"
                             class="img-size-50 mr-3 img-circle"
                             style="width: 50px; height: 50px; object-fit: cover;"
                             id="header-avatar-preview">
-                        <div class="media-body">
-                            <h3 class="dropdown-item-title">
+                        <div class="media-body profile-dropdown__body">
+                            <h3 class="dropdown-item-title profile-dropdown__name">
                                 <span id="header-user-name">{{ Auth::user()->name ?? '' }}</span>
                                 <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
                             </h3>
-                            <p class="text-sm" id="header-user-email">{{ Auth::user()->email ?? '' }}</p>
+                            <p class="text-sm profile-dropdown__email" id="header-user-email">{{ Auth::user()->email ?? '' }}</p>
                             <p class="text-sm text-muted mb-0">
                                 <i class="far fa-clock mr-1"></i>
                                 {{ date('d/m/Y') }}
@@ -46,6 +46,43 @@
         </li>
     </ul>
 </nav>
+
+<style>
+    .profile-dropdown {
+        width: min(360px, calc(100vw - 24px));
+        max-width: calc(100vw - 24px);
+        overflow: hidden;
+    }
+
+    .profile-dropdown .dropdown-item {
+        white-space: normal;
+    }
+
+    .profile-dropdown__media {
+        min-width: 0;
+    }
+
+    .profile-dropdown__body {
+        min-width: 0;
+    }
+
+    .profile-dropdown__name,
+    .profile-dropdown__email {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        line-height: 1.35;
+    }
+
+    .profile-dropdown__name {
+        padding-right: 20px;
+        font-size: 1rem;
+    }
+
+    .profile-dropdown__email {
+        margin-bottom: .35rem;
+    }
+</style>
 
 <!-- Modal Cập nhật Profile -->
 <div class="modal fade" id="adminProfileModal" tabindex="-1" role="dialog" aria-labelledby="adminProfileModalLabel" aria-hidden="true">

@@ -2,244 +2,353 @@
 
 namespace App\Models;
 
+use App\Core\Permission\Role;
+use App\Core\Tenant\Tenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Gate;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, LogsActivity;
+    use HasFactory, Notifiable;
 
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logFillable()
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-            ->dontLogIfAttributesChangedOnly(['remember_token', 'updated_at']);
-    }
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_INACTIVE = 'inactive';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
+        'tenant_id',
+        'role_id',
         'name',
         'email',
         'phone',
         'avatar',
         'email_verified_at',
         'password',
-        'password',
-        'is_approve',
-        'remember_token',
-        'is_super_admin',
         'status',
-        'group_id',
-        'approval_level',
-        'max_approval',
-        'is_draft',
-        'main_id',
-        'status_approve'
+        'is_platform_owner',
+        'remember_token',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    const STATUS_ACTIVE = 1;
-    const STATUS_INACTIVE = 0;
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_platform_owner' => 'boolean',
         ];
     }
 
-    const ROOT_ADMIN_ID = 1;
-    const PATTERN_PASSWORD = [
-        'PATTERN' => '/^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).+$/',
-        'MESSAGE' => 'Mật khẩu phải lớn hơn 8 ký tự và chứa ít nhất 1 chữ viết hoa, 1 ký tự đặc biệt'
-    ];
-
-    public function group()
+    public function tenant()
     {
-        return $this->belongsTo(Group::class, 'group_id', 'id');
+        return $this->belongsTo(Tenant::class);
     }
 
-
-    public function getAllPermissionsFromGroup(): array
+    public function role()
     {
-        $group = $this->group;
-        if (!$group) return [];
-
-        $permissions = $group->permission_data ?? [];
-        if (is_string($permissions)) {
-            $permissions = json_decode($permissions, true);
-        }
-
-        return $permissions ?? [];
+        return $this->belongsTo(Role::class);
     }
-    public function getGroupNameAttribute(): string
-    {
-        if ($this->isSuperAdmin()) {
-            return 'Super Admin';
-        }
 
-        return data_get($this, 'group.name', 'Guest');
+    public function isPlatformOwner(): bool
+    {
+        return (bool) $this->is_platform_owner;
+    }
+
+    public function isTenantOrganizer(): bool
+    {
+        return ! $this->isPlatformOwner()
+            && $this->tenant_id !== null
+            && $this->role?->slug === 'organizer';
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === self::STATUS_ACTIVE || $this->status == 1;
+    }
+
+    public function getIsSuperAdminAttribute(): bool
+    {
+        return $this->isSuperAdmin();
     }
 
     public function isSuperAdmin(): bool
     {
-        return $this->id === self::ROOT_ADMIN_ID || $this->is_super_admin;
-    }
-
-    /**
-     * Kiểm tra quyền chung (không phụ thuộc record)
-     */
-    public function hasPermission(string $perm_key): bool
-    {
-        if ($this->isSuperAdmin()) {
+        if ($this->isPlatformOwner() || $this->isTenantOrganizer()) {
             return true;
         }
 
-        $permission_data = data_get($this, 'group.permission_data', []);
+        if ($this->tenant_id !== null) {
+            try {
+                $tenantUser = \Illuminate\Support\Facades\DB::connection('tenant')->table('users')
+                    ->where('email', $this->email)
+                    ->first();
 
-        return in_array($perm_key, $permission_data, true);
-    }
-
-    /**
-     * Lấy scope theo module từ group.scope_data
-     */
-    public function getScope(string $perm_key): ?array
-    {
-        if ($this->isSuperAdmin()) {
-            return null; // full
+                return $tenantUser && ($tenantUser->id === 1 || !empty($tenantUser->is_super_admin));
+            } catch (\Throwable $e) {
+                return false;
+            }
         }
 
-        $scope_data = data_get($this, 'group.scope_data', []);
+        return false;
+    }
 
-        // Tách resource từ key (vd: "project/edit" => "project")
-        $resource = explode('/', $perm_key)[0] ?? null;
-        if (!$resource) {
+    public function getIsApproveAttribute(): bool
+    {
+        if ($this->isPlatformOwner() || $this->isTenantOrganizer()) {
+            return true;
+        }
+
+        if ($this->tenant_id !== null) {
+            try {
+                $tenantUser = \Illuminate\Support\Facades\DB::connection('tenant')->table('users')
+                    ->where('email', $this->email)
+                    ->first();
+
+                return $tenantUser && !empty($tenantUser->is_approve);
+            } catch (\Throwable $e) {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    public function getScope(string $permissionKey): ?array
+    {
+        if ($this->isPlatformOwner() || $this->isTenantOrganizer()) {
             return null;
         }
 
-        return $scope_data[$resource] ?? null;
-    }
+        if ($this->tenant_id !== null) {
+            try {
+                $tenantUser = \Illuminate\Support\Facades\DB::connection('tenant')->table('users')
+                    ->where('email', $this->email)
+                    ->first();
 
-    /**
-     * Kiểm tra có thể thao tác trên record cụ thể hay không
-     */
-    public function canDoOn(string $permissionKey, ?int $recordId = null): bool
-    {
-        if (!$this->hasPermission($permissionKey)) {
-            return false;
+                if (! $tenantUser || ! $tenantUser->group_id) {
+                    return [];
+                }
+
+                $group = \Illuminate\Support\Facades\DB::connection('tenant')->table('groups')
+                    ->where('id', $tenantUser->group_id)
+                    ->first();
+
+                if (! $group) {
+                    return [];
+                }
+
+                $scopeData = json_decode($group->scope_data ?? '[]', true);
+                if (! is_array($scopeData)) {
+                    return [];
+                }
+
+                $resource = explode('/', str_replace('.', '/', $permissionKey))[0] ?? null;
+                if (!$resource) {
+                    return [];
+                }
+
+                return $scopeData[$resource] ?? [];
+            } catch (\Throwable $e) {
+                logger()->error('Error getting tenant scope for user ' . $this->email . ': ' . $e->getMessage());
+                return [];
+            }
         }
 
-        $module = explode('/', $permissionKey)[0];
-        $scopeData = $this->getScopeData();
-
-        if (!array_key_exists($module, $scopeData)) {
-            return false;
-        }
-
-        $scope = $scopeData[$module];
-
-        if (empty($scope)) {
-            return true;
-        }
-
-        if ($recordId !== null) {
-            return in_array($recordId, $scope);
-        }
-
-        return true;
+        return null;
     }
 
     public function getScopeData(): array
     {
-        $group = $this->group;
-        if (!$group) return [];
-
-        $data = $group->scope_data ?? [];
-        if (is_string($data)) {
-            $data = json_decode($data, true);
-        }
-
-        return $data ?? [];
+        return [];
     }
 
-    /**
-     * Gợi ý các button action cho user
-     */
-    public static function makeOptionColumnButton(): array
+    public function canDoOn(string $permissionKey, ?int $recordId = null): bool
     {
-        $options = [];
+        if ($this->isPlatformOwner() || $this->isTenantOrganizer() || $this->isSuperAdmin()) {
+            return true;
+        }
 
-        foreach (['edit', 'delete'] as $action) {
-            if (Gate::allows('user/' . $action)) {
-                $options[$action] = [
-                    'route' => 'backend_user_' . $action,
-                ];
+        if ($this->tenant_id !== null) {
+            if (!$this->hasPermission($permissionKey)) {
+                return false;
+            }
+
+            try {
+                $tenantUser = \Illuminate\Support\Facades\DB::connection('tenant')->table('users')
+                    ->where('email', $this->email)
+                    ->first();
+
+                if (! $tenantUser || ! $tenantUser->group_id) {
+                    return false;
+                }
+
+                $group = \Illuminate\Support\Facades\DB::connection('tenant')->table('groups')
+                    ->where('id', $tenantUser->group_id)
+                    ->first();
+
+                if (! $group) {
+                    return false;
+                }
+
+                $scopeData = json_decode($group->scope_data ?? '[]', true);
+                if (! is_array($scopeData)) {
+                    return false;
+                }
+
+                $module = explode('/', str_replace('.', '/', $permissionKey))[0];
+
+                if (!array_key_exists($module, $scopeData)) {
+                    return false;
+                }
+
+                $scope = $scopeData[$module];
+
+                if (empty($scope)) {
+                    return true;
+                }
+
+                if ($recordId !== null) {
+                    return in_array($recordId, $scope) || in_array((string)$recordId, $scope);
+                }
+
+                return true;
+            } catch (\Throwable $e) {
+                logger()->error('Error checking tenant scope for user ' . $this->email . ': ' . $e->getMessage());
+                return false;
             }
         }
 
-        return $options;
-    }
-    public function draft()
-    {
-        return $this->hasOne(User::class, 'main_id')->where('is_draft', true);
+        return $this->hasPermission(str_replace('/', '.', $permissionKey));
     }
 
-    public function main()
+    public function hasPermission(string $permissionKey): bool
     {
-        return $this->belongsTo(User::class, 'main_id');
-    }
+        if ($this->isPlatformOwner()) {
+            return true;
+        }
 
-    public function scopeVisibleFor($query, $user)
-    {
-        return $query->where(function ($q) use ($user) {
-            if ($user->is_super_admin || $user->is_approve) {
-                $q->where(function ($sub) {
-                    $sub->where('is_draft', false)
-                        ->where(function ($s) {
-                            $s->whereDoesntHave('draft')
-                                ->orWhereHas('draft', function ($d) {
-                                    $d->where('status_approve', 'rejected');
-                                });
-                        });
-                })
-                    ->orWhere(function ($sub) {
-                        $sub->where('is_draft', true)
-                            ->where('status_approve', '!=', 'rejected');
-                    });
-            } else {
-                $q->where(function ($sub) {
-                    $sub->where('is_draft', false)
-                        ->whereDoesntHave('draft');
-                })
-                    ->orWhere(function ($sub) {
-                        $sub->where('is_draft', true);
-                    });
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
+        if ($this->tenant_id !== null && !$this->isTenantOrganizer()) {
+            try {
+                $tenantUser = \Illuminate\Support\Facades\DB::connection('tenant')->table('users')
+                    ->where('email', $this->email)
+                    ->first();
+
+                if (! $tenantUser || ! $tenantUser->group_id) {
+                    return false;
+                }
+
+                $group = \Illuminate\Support\Facades\DB::connection('tenant')->table('groups')
+                    ->where('id', $tenantUser->group_id)
+                    ->first();
+
+                if (! $group) {
+                    return false;
+                }
+
+                $permissionData = json_decode($group->permission_data ?? '[]', true);
+                if (! is_array($permissionData)) {
+                    return false;
+                }
+
+                $keysToCheck = [];
+                $slashKey = str_replace('.', '/', $permissionKey);
+                $dotKey = str_replace('/', '.', $permissionKey);
+                $keysToCheck[] = $slashKey;
+                $keysToCheck[] = $dotKey;
+
+                $parts = explode('/', $slashKey);
+                if (count($parts) > 1) {
+                    $lastPart = end($parts);
+                    $alternateLastPart = null;
+                    if ($lastPart === 'add') {
+                        $alternateLastPart = 'create';
+                    } elseif ($lastPart === 'create') {
+                        $alternateLastPart = 'add';
+                    } elseif ($lastPart === 'edit') {
+                        $alternateLastPart = 'update';
+                    } elseif ($lastPart === 'update') {
+                        $alternateLastPart = 'edit';
+                    }
+
+                    if ($alternateLastPart !== null) {
+                        $parts[count($parts) - 1] = $alternateLastPart;
+                        $keysToCheck[] = implode('/', $parts);
+                        $keysToCheck[] = implode('.', $parts);
+                    }
+                } elseif (count($parts) === 1 && !empty($parts[0])) {
+                    $keysToCheck[] = $parts[0] . '/view';
+                    $keysToCheck[] = $parts[0] . '.view';
+                }
+
+                foreach ($keysToCheck as $key) {
+                    if (in_array($key, $permissionData, true)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            } catch (\Throwable $e) {
+                logger()->error('Error checking tenant permission for user ' . $this->email . ': ' . $e->getMessage());
+                return false;
             }
-        });
+        }
+
+        if (! $this->role) {
+            return false;
+        }
+
+        [$module, $permission] = array_pad(explode('.', $permissionKey, 2), 2, null);
+
+        if (! $module || ! $permission) {
+            return false;
+        }
+
+        return $this->role->permissions()
+            ->where('module', $module)
+            ->where('permission', $permission)
+            ->exists();
+    }
+
+    public function getAllPermissionsFromGroup(): array
+    {
+        if ($this->isPlatformOwner()) {
+            return [];
+        }
+
+        if ($this->tenant_id !== null && !$this->isTenantOrganizer()) {
+            try {
+                $tenantUser = \Illuminate\Support\Facades\DB::connection('tenant')->table('users')
+                    ->where('email', $this->email)
+                    ->first();
+
+                if (! $tenantUser || ! $tenantUser->group_id) {
+                    return [];
+                }
+
+                $group = \Illuminate\Support\Facades\DB::connection('tenant')->table('groups')
+                    ->where('id', $tenantUser->group_id)
+                    ->first();
+
+                if (! $group) {
+                    return [];
+                }
+
+                $permissionData = json_decode($group->permission_data ?? '[]', true);
+                return is_array($permissionData) ? $permissionData : [];
+            } catch (\Throwable $e) {
+                logger()->error('Error getting tenant permissions from group for user ' . $this->email . ': ' . $e->getMessage());
+                return [];
+            }
+        }
+
+        return [];
     }
 }

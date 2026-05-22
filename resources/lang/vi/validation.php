@@ -1,6 +1,24 @@
 <?php
 
 return [
+    'required' => ':attribute là bắt buộc.',
+    'required_if' => ':attribute là bắt buộc khi :other là :value.',
+    'string' => ':attribute không hợp lệ.',
+    'integer' => ':attribute phải là số nguyên.',
+    'boolean' => ':attribute phải là đúng hoặc sai.',
+    'email' => ':attribute không đúng định dạng email.',
+    'min' => [
+        'string' => ':attribute phải có ít nhất :min ký tự.',
+        'numeric' => ':attribute phải lớn hơn hoặc bằng :min.',
+    ],
+    'max' => [
+        'string' => ':attribute không được vượt quá :max ký tự.',
+        'numeric' => ':attribute không được vượt quá :max.',
+    ],
+    'unique' => ':attribute đã được sử dụng.',
+    'exists' => ':attribute không hợp lệ.',
+    'in' => ':attribute không hợp lệ.',
+
     // Name
     'name.required' => 'Vui lòng nhập họ và tên',
     'name.string' => 'Họ và tên không hợp lệ',
@@ -38,4 +56,19 @@ return [
 
     // Avatar
     'avatar.string' => 'Avatar không hợp lệ',
+
+    'attributes' => [
+        'name' => 'Tên tenant',
+        'slug' => 'Slug',
+        'status' => 'Status',
+        'database.driver' => 'Driver',
+        'database.host' => 'Host',
+        'database.port' => 'Port',
+        'database.database_name' => 'Database name',
+        'database.username' => 'Username',
+        'database.password' => 'Password',
+        'organizer.name' => 'Tên organizer',
+        'organizer.email' => 'Email organizer',
+        'organizer.password' => 'Password organizer',
+    ],
 ];
