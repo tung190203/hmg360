@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use GuzzleHttp\Client;
 use Symfony\Component\DomCrawler\Crawler;
 use andreskrey\Readability\Readability;
@@ -183,7 +184,7 @@ public function save(InvestmentGuide $investment_guide, Request $request)
         'project_type' => 'nullable|string',
         'project_id' => 'nullable|integer',
         'projects' => 'nullable|array',
-        'projects.*' => 'integer|exists:projects,id',
+        'projects.*' => ['integer', Rule::exists(Project::class, 'id')],
         
         // Cập nhật Validation cho files (URL)
         'files' => 'nullable|array',

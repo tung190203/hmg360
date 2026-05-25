@@ -4,9 +4,11 @@ namespace App\TenantModules\Tenants\TrungTamXucTienHaNoi\Guest\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\TenantModules\Tenants\TrungTamXucTienHaNoi\Support\Models\Guest;
+use App\TenantModules\Tenants\TrungTamXucTienHaNoi\Support\Models\Nation;
 use Illuminate\Http\Request;
 use App\Libs\DataGrid;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 class GuestController extends Controller
 {
@@ -87,7 +89,7 @@ class GuestController extends Controller
         if (!$guest->exists && !Gate::allows('guest/add')) {
             abort(403, self::MESSAGE_UNAUTHORIZED);
         }
-        $nations = \App\TenantModules\Tenants\TrungTamXucTienHaNoi\Support\Models\Nation::all();
+        $nations = Nation::all();
         return view('ttxt-leads::guest.create', compact('guest', 'nations'));
     }
 
@@ -102,10 +104,10 @@ class GuestController extends Controller
         $rules = [
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
-            'email' => 'required|email|unique:guests,email,' . ($guest->id ?? 'NULL'),
+            'email' => ['required', 'email', Rule::unique(Guest::class, 'email')->ignore($guest->id)],
             'address' => 'nullable|string',
             'identification_number' => 'nullable|string|max:50',
-            'nation_id' => 'nullable|exists:nations,id',
+            'nation_id' => ['nullable', Rule::exists(Nation::class, 'id')],
             'password' => $guest->exists ? 'nullable|min:6' : 'required|min:6',
         ];
 

@@ -13,6 +13,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Symfony\Component\DomCrawler\Crawler;
 use andreskrey\Readability\Readability;
 use andreskrey\Readability\Configuration;
@@ -183,7 +184,7 @@ class PostController extends Controller
             'project_id' => 'nullable|integer',
             'published_at' => 'nullable|date',
             'projects' => 'nullable|array',
-            'projects.*' => 'integer|exists:projects,id',
+            'projects.*' => ['integer', Rule::exists(Project::class, 'id')],
             // Cập nhật Validation cho files (URL)
             'files' => 'nullable|array',
             'files.*' => 'nullable|array', // Mảng URL tệp cho từng locale

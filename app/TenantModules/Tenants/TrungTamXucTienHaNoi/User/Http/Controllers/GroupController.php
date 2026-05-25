@@ -7,6 +7,7 @@ use App\TenantModules\Tenants\TrungTamXucTienHaNoi\Support\Models\Group;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 class GroupController extends Controller
 {
@@ -81,7 +82,7 @@ class GroupController extends Controller
         }
 
         $request->validate([
-            'name' => 'required|string|unique:groups,name,' . $group->id,
+            'name' => ['required', 'string', Rule::unique(Group::class, 'name')->ignore($group->id)],
             'permission' => 'required|array',
         ]);
 
@@ -190,4 +191,3 @@ class GroupController extends Controller
         return $permission_configs;
     }
 }
-
