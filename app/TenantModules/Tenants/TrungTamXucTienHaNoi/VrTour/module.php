@@ -8,11 +8,14 @@ return [
         'title' => 'VR Tour',
         'icon' => 'fas fa-vr-cardboard',
         'route' => 'legacy.vr-tour.index',
+        'section' => 'content',
+        'sort_order' => 90,
     ],
     'menu_items' => [
         'vr_tour' => [
             'title' => 'VrTour',
             'icon' => 'fas fa-vr-cardboard',
+            'section' => 'content',
             'sort_order' => 90,
             'items' => [
                 'skin' => [

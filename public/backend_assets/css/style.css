@@ -10,6 +10,49 @@ img {
   max-width: 100%;
 }
 
+.hmg-brand-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 82px;
+  min-height: 82px;
+  padding: 10px 16px;
+  overflow: hidden;
+  background: #14263f;
+}
+
+.hmg-brand-link .hmg-brand-logo {
+  display: block;
+  width: 100%;
+  max-width: 214px;
+  max-height: 58px;
+  height: auto;
+  object-fit: contain;
+}
+
+.sidebar-collapse .hmg-brand-link {
+  justify-content: center;
+  height: 57px;
+  min-height: 57px;
+  padding: 8px;
+}
+
+.sidebar-collapse .hmg-brand-link .hmg-brand-logo {
+  width: 42px;
+  max-width: 42px;
+  max-height: 40px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.hmg-brand-link + .sidebar {
+  padding-top: 14px;
+}
+
+.sidebar-collapse .hmg-brand-link + .sidebar {
+  padding-top: 0;
+}
+
 .table-grid-admin td, .table-grid-admin th {
   vertical-align: middle;
   border: 1px dotted rgba(222, 226, 230, 0.6);

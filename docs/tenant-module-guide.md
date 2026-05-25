@@ -65,6 +65,14 @@ Module chỉ truy cập được khi:
 - Module đang enabled trong bảng `modules`.
 - User có permission cần thiết.
 
+Menu sidebar không lấy trực tiếp từ việc folder module có tồn tại. Sidebar lấy từ các module enabled trong bảng `modules`, sau đó đọc `modules.config.menu` hoặc `module.php` (`menu` / `menu_items`) để biết title, icon, route và nhóm hiển thị.
+
+Platform owner và tenant user nhìn sidebar khác nhau:
+
+- Platform owner chỉ thấy menu quản trị platform từ `config('cms.backend_module')`.
+- Tenant user/organizer mới thấy module nghiệp vụ của tenant qua `ModuleManager::menuForTenant($user->tenant)`.
+- Vì vậy owner thấy tenant có 13 module không có nghĩa là owner sẽ thấy 13 mục nghiệp vụ trong sidebar.
+
 ## 2. Quy Trình Tạo Tenant Mới
 
 ### Bước 1: Tạo database tenant trên MySQL
@@ -116,6 +124,14 @@ Kết quả:
 - Tạo folder `app/TenantModules/Tenants/{tenant_studly}`.
 - Tạo central user organizer nếu có `--organizer-email`.
 - Tạo role `organizer` cho tenant.
+
+Lưu ý quan trọng:
+
+- Bước này không tự tạo record trong `modules`.
+- Bước này không tự tạo permission module.
+- Bước này không tự tạo menu sidebar cho module.
+- Bước này không tự migrate schema tenant DB.
+- Nếu tenant DB đã có sẵn data/schema và source module đã có sẵn, vẫn phải register module vào platform DB.
 
 Ví dụ minh họa:
 
@@ -198,6 +214,7 @@ Khi tự tạo module hoàn toàn thủ công, phải tự làm đủ bốn vi�
 2. Tạo `module.php` và `routes.php`.
 3. Tạo record trong bảng trung tâm `modules`.
 4. Tạo permission trong bảng `permissions` và gán cho role/group cần dùng.
+5. Đảm bảo menu có `route` hợp lệ qua `modules.config.menu` hoặc `module.php`.
 
 Ví dụ register module thủ công qua Tinker. Chỉ dùng đoạn này trong các trường hợp thủ công ở trên, không cần chạy nếu đã dùng `tenant:module-create`:
 
@@ -237,6 +254,118 @@ $permissionIds = collect(['view', 'create', 'update', 'delete'])->map(function (
     ->where('slug', 'organizer')
     ->get()
     ->each(fn ($role) => $role->permissions()->syncWithoutDetaching($permissionIds));
+```
+
+#### Import module đã code sẵn cho tenant đã có
+
+Dùng phần này khi:
+
+- Tenant đã có trong bảng `tenants`.
+- DB config đã có trong `tenant_databases`.
+- Source module đã nằm trong `app/TenantModules/Tenants/{tenant_studly}`.
+- Bảng `modules` vẫn chưa có record module, hoặc module có record nhưng không hiện sidebar.
+
+Trước tiên kiểm tra đúng tenant và folder:
+
+```bash
+php artisan tinker
+```
+
+```php
+\App\Core\Tenant\Tenant::select('id', 'name', 'slug')->get();
+\File::directories(app_path('TenantModules/Tenants'));
+```
+
+Nếu tenant slug là `{tenant}` và folder là `{tenant_studly}`, register tất cả module có `module.php` trong folder đó:
+
+```php
+eval(<<<'PHP'
+$tenant = \App\Core\Tenant\Tenant::where('slug', '{tenant}')->firstOrFail();
+$tenantFolder = '{tenant_studly}';
+$basePath = app_path("TenantModules/Tenants/{$tenantFolder}");
+
+foreach (\File::directories($basePath) as $moduleDir) {
+    $manifestPath = $moduleDir . '/module.php';
+
+    if (! file_exists($manifestPath)) {
+        continue;
+    }
+
+    $manifest = require $manifestPath;
+    $folder = basename($moduleDir);
+    $slug = $manifest['slug'] ?? \Illuminate\Support\Str::kebab($folder)->toString();
+    $permissions = $manifest['permissions'] ?? ['view', 'create', 'update', 'delete'];
+    $menu = $manifest['menu'] ?? null;
+    $hasMenuItems = is_array($manifest['menu_items'] ?? null);
+    $config = $hasMenuItems ? null : (is_array($menu) ? ['menu' => $menu] : null);
+
+    \App\Core\Module\Module::updateOrCreate(
+        ['tenant_id' => $tenant->id, 'slug' => $slug],
+        [
+            'name' => $manifest['name'] ?? $folder,
+            'path' => "Tenants/{$tenantFolder}/{$folder}",
+            'is_enabled' => true,
+            'sort_order' => $menu['sort_order'] ?? 0,
+            'config' => $config,
+        ]
+    );
+
+    $permissionIds = collect($permissions)->map(function ($permission) use ($slug) {
+        return \App\Core\Permission\Permission::firstOrCreate([
+            'module' => $slug,
+            'permission' => $permission,
+        ])->id;
+    })->all();
+
+    \App\Core\Permission\Role::firstOrCreate(
+        ['tenant_id' => $tenant->id, 'slug' => 'organizer'],
+        ['name' => 'Organizer']
+    )->permissions()->syncWithoutDetaching($permissionIds);
+}
+
+dump(\App\Core\Module\Module::where('tenant_id', $tenant->id)->select('slug', 'name', 'path', 'is_enabled', 'config')->get()->toArray());
+PHP);
+```
+
+Nếu một module đã register nhưng không hiện sidebar, nguyên nhân thường là `module.php` không có `menu`, hoặc `modules.config.menu.route` trỏ tới route không tồn tại. Khi đó thêm `config.menu` cho module:
+
+```php
+\App\Core\Module\Module::where('tenant_id', $tenant->id)
+    ->where('slug', '{module}')
+    ->update([
+        'is_enabled' => true,
+        'sort_order' => 10,
+        'config' => [
+            'menu' => [
+                'title' => '{module_name}',
+                'icon' => 'fas fa-cube',
+                'route' => '{route_name}',
+                'section' => 'content',
+            ],
+        ],
+    ]);
+```
+
+Với module có menu con, dùng `items` thay vì `route` cấp cha:
+
+```php
+'config' => [
+    'menu' => [
+        'title' => '{module_name}',
+        'icon' => 'fas fa-cube',
+        'section' => 'systems',
+        'items' => [
+            'general' => ['title' => 'Cấu hình chung', 'route' => '{route_name}'],
+        ],
+    ],
+],
+```
+
+Sau khi import hoặc sửa menu:
+
+```bash
+php artisan optimize:clear
+php artisan tenant:module-list {tenant}
 ```
 
 ### Bước 4: Sync user có sẵn nếu tenant DB đã có data
@@ -732,24 +861,36 @@ Tenants/{tenant_studly}/{module_studly}
 Kiểm tra:
 
 - Module enabled.
-- `module.php` có `menu.route`.
+- Login bằng tenant user/organizer, không phải platform owner.
+- `modules.config.menu` có `route` hoặc `items`, hoặc `module.php` có `menu` / `menu_items`.
 - Route name tồn tại trong `php artisan route:list`.
 - User có permission module.
 - `config` trong bảng `modules` có override menu sai không.
+- Nếu module đã có trong `tenant:module-list` nhưng sidebar không hiện, kiểm tra route:
+
+```bash
+php artisan route:list --name={route_name}
+```
+
+Nếu route không tồn tại, menu sẽ bị `ModuleManager` lọc ra.
+
+Nếu chỉ một vài module hiện dù `tenant:module-list` có nhiều module, thường là các module hiện có `menu` hợp lệ, còn module ẩn chưa có `config.menu` hoặc `module.php['menu']`.
 
 ## 6. Checklist Tạo Tenant Mới
 
 1. Tạo database vật lý cho tenant.
 2. Chạy `php artisan tenant:create ...`.
-3. Tạo/register từng module riêng cho tenant.
-4. Chạy migration module nếu module có file migration.
-5. Nếu tenant DB đã có sẵn user, chạy `php artisan tenant:sync-users {tenant}`.
-6. Tạo organizer/user nếu chưa có.
-7. Chạy `php artisan optimize:clear`.
-8. Login organizer, vào dashboard.
-9. Kiểm tra menu module.
-10. Tạo group permission cho user thường.
-11. Tạo user thường và test các route create/edit/delete.
+3. Nếu module đã code sẵn, import/register module vào bảng `modules`; nếu module mới hoàn toàn, chạy `tenant:module-create`.
+4. Tạo/cập nhật permission module và gán cho role `organizer`.
+5. Đảm bảo mỗi module cần hiện sidebar có `config.menu` hoặc `module.php` có `menu` / `menu_items`.
+6. Chạy migration module nếu module có file migration.
+7. Nếu tenant DB đã có sẵn user, chạy `php artisan tenant:sync-users {tenant}`.
+8. Tạo organizer/user nếu chưa có.
+9. Chạy `php artisan optimize:clear`.
+10. Login bằng tenant organizer, không dùng platform owner để kiểm tra module nghiệp vụ.
+11. Kiểm tra menu module và mở từng route chính.
+12. Tạo group permission cho user thường.
+13. Tạo user thường và test các route create/edit/delete.
 
 ## 7. Checklist Tạo Module Mới
 
@@ -835,5 +976,7 @@ php artisan tenant:sync-users demo-tenant
 - Không dùng route model binding nếu route không chạy `tenant.db`.
 - Permission nên check trong controller, không chỉ ẩn/hiện button ở view.
 - Migration tenant module phải đặt trong module và chỉ chạy qua `tenant:module-migrate` sau khi file migration đã tồn tại.
+- Module muốn hiện sidebar phải khai báo menu rõ ràng: `modules.config.menu`, `module.php['menu']`, hoặc `module.php['menu_items']`.
+- Menu route phải là route name đang tồn tại; nếu route không tồn tại, menu sẽ bị lọc.
 - View namespace nên lấy từ `module.php`, không hardcode lung tung.
 - Sau khi đổi route/view/config, chạy `php artisan optimize:clear`.

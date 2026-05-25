@@ -13,17 +13,85 @@
     <link rel="stylesheet" href="{{ asset('backend_assets/vendor/bootstrap/icheck-bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend_assets/css/adminlte.min.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <style>
+        body.login-page {
+            min-height: 100vh;
+            background: #eef3f8;
+        }
+
+        .login-box {
+            width: min(420px, calc(100vw - 32px));
+        }
+
+        .hmg-login-card {
+            border: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 18px 45px rgba(20, 38, 64, .16);
+        }
+
+        .hmg-login-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 132px;
+            padding: 28px 30px;
+            background: #14263f;
+        }
+
+        .hmg-login-logo {
+            display: block;
+            width: 100%;
+            max-width: 320px;
+            height: auto;
+        }
+
+        .hmg-login-body {
+            padding: 28px 30px 30px;
+        }
+
+        .hmg-login-title {
+            margin-bottom: 22px;
+            color: #253244;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .hmg-login-body .form-control,
+        .hmg-login-body .input-group-text,
+        .hmg-login-submit {
+            height: 42px;
+        }
+
+        .hmg-login-submit {
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 575.98px) {
+            .hmg-login-brand {
+                min-height: 112px;
+                padding: 24px;
+            }
+
+            .hmg-login-body {
+                padding: 24px;
+            }
+        }
+    </style>
 </head>
 
 <body class="hold-transition login-page">
     <div class="login-box">
-        <div class="login-logo">
-            <a href="{{ route('backend_dashboard') }}">{!! config('cms.logo.lg') !!}</a>
-        </div>
-        <!-- /.login-logo -->
-        <div class="card">
-            <div class="card-body login-card-body">
-                <p class="login-box-msg">Sign in to start your session</p>
+        <div class="card hmg-login-card">
+            <a href="{{ route('backend_dashboard') }}" class="hmg-login-brand">
+                <img src="{{ asset('backend_assets/images/hmglogo.png') }}" alt="{{ config('cms.name') }}"
+                    class="hmg-login-logo">
+            </a>
+
+            <div class="card-body login-card-body hmg-login-body">
+                <p class="hmg-login-title">Sign in to your workspace</p>
                 @if (session('error'))
                 <div class="alert alert-danger">
                     {{ session('error') }}
@@ -68,7 +136,7 @@
                         </div>
                         <!-- /.col -->
                         <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                            <button type="submit" class="btn btn-primary btn-block hmg-login-submit">Sign In</button>
                         </div>
                         <!-- /.col -->
                     </div>
