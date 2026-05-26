@@ -16,7 +16,7 @@
     <link href="{{ asset('backend_assets/vendor/overlayScrollbars/OverlayScrollbars.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css">
     <link rel="stylesheet" href="{{ asset('backend_assets/vendor/toastr/toastr.min.css') }}">
-    <link href="{{ asset('backend_assets/css/style.css') }}?v=1.1.6" rel="stylesheet">
+    <link href="{{ asset('backend_assets/css/style.css') }}?v=1.1.9" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 

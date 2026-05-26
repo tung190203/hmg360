@@ -13,10 +13,10 @@ img {
 .hmg-brand-link {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   height: 82px;
   min-height: 82px;
-  padding: 10px 16px;
+  padding: 10px 18px;
   overflow: hidden;
   background: #14263f;
 }
@@ -30,6 +30,10 @@ img {
   object-fit: contain;
 }
 
+.hmg-brand-link .hmg-brand-logo--mini {
+  display: none;
+}
+
 .sidebar-collapse .hmg-brand-link {
   justify-content: center;
   height: 57px;
@@ -37,12 +41,31 @@ img {
   padding: 8px;
 }
 
-.sidebar-collapse .hmg-brand-link .hmg-brand-logo {
-  width: 42px;
-  max-width: 42px;
-  max-height: 40px;
+.sidebar-collapse .hmg-brand-link .hmg-brand-logo--full {
+  display: none;
+}
+
+.sidebar-collapse .hmg-brand-link .hmg-brand-logo--mini {
+  display: block;
+  width: 38px;
+  max-width: 38px;
+  max-height: 38px;
   object-fit: contain;
-  object-position: left center;
+}
+
+.sidebar-mini.sidebar-collapse .main-sidebar:hover .hmg-brand-link {
+  justify-content: flex-start;
+  height: 82px;
+  min-height: 82px;
+  padding: 10px 18px;
+}
+
+.sidebar-mini.sidebar-collapse .main-sidebar:hover .hmg-brand-link .hmg-brand-logo--full {
+  display: block;
+}
+
+.sidebar-mini.sidebar-collapse .main-sidebar:hover .hmg-brand-link .hmg-brand-logo--mini {
+  display: none;
 }
 
 .hmg-brand-link + .sidebar {
@@ -51,6 +74,10 @@ img {
 
 .sidebar-collapse .hmg-brand-link + .sidebar {
   padding-top: 0;
+}
+
+.sidebar-mini.sidebar-collapse .main-sidebar:hover .hmg-brand-link + .sidebar {
+  padding-top: 14px;
 }
 
 .table-grid-admin td, .table-grid-admin th {

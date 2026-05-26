@@ -1,7 +1,9 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="{{ route('backend_dashboard') }}" class="brand-link hmg-brand-link">
         <img src="{{ asset('backend_assets/images/hmglogo.png') }}" alt="{{ config('cms.name') }}"
-            class="hmg-brand-logo">
+            class="hmg-brand-logo hmg-brand-logo--full">
+        <img src="{{ asset('backend_assets/images/logomini.png') }}" alt="{{ config('cms.name') }}"
+            class="hmg-brand-logo hmg-brand-logo--mini">
     </a>
 
     <div class="sidebar">
