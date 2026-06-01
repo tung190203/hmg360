@@ -18,6 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(
             except: ['ckfinder/*']
         );
+        $middleware->web(append: [
+            \App\Http\Middleware\SecurityHeaders::class,
+        ]);
         $middleware->alias([
             'active.user' => \App\Http\Middleware\EnsureActiveUser::class,
             'platform.owner' => \App\Http\Middleware\EnsurePlatformOwner::class,
