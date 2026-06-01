@@ -140,6 +140,10 @@
                         </div>
                         <!-- /.col -->
                     </div>
+
+                    <p class="mb-0 mt-3 text-center">
+                        <a href="{{ route('password.request') }}">Forgot your password?</a>
+                    </p>
                 </form>
             </div>
             <!-- /.login-card-body -->
