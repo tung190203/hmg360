@@ -1,9 +1,22 @@
 <?php
 
 use App\TenantModules\Tenants\TrungTamXucTienHaNoi\ChatbotManagement\Http\Controllers\AIChatMonitorController;
+use App\TenantModules\Tenants\TrungTamXucTienHaNoi\ChatbotManagement\Http\Controllers\AIChatController;
 use App\TenantModules\Tenants\TrungTamXucTienHaNoi\ChatbotManagement\Http\Controllers\ChatbotSettingController;
 use App\TenantModules\Tenants\TrungTamXucTienHaNoi\ChatbotManagement\Http\Controllers\ChatbotAdminController;
+use App\TenantModules\Tenants\TrungTamXucTienHaNoi\ChatbotManagement\Http\Controllers\TtxtWebhookController;
 use Illuminate\Support\Facades\Route;
+
+Route::post('/ttxt/webhook', TtxtWebhookController::class)->name('ttxt_webhook');
+Route::post('/webhooks/ttxt', TtxtWebhookController::class)->name('ttxt_webhook_legacy');
+
+Route::prefix('chat')->group(function () {
+    Route::post('/', [AIChatController::class, 'chat']);
+    Route::get('/session/{sessionId}', [AIChatController::class, 'sessionHistory']);
+    Route::delete('/session/{sessionId}', [AIChatController::class, 'deleteSession']);
+    Route::post('/feedback', [AIChatController::class, 'submitFeedback']);
+    Route::get('/health', [AIChatController::class, 'getHealthStatus']);
+});
 
 Route::middleware(['auth', 'active.user', 'tenant.db', 'module.enabled:chatbot_management,Tenants/TrungTamXucTienHaNoi/ChatbotManagement'])
     ->group(function () {

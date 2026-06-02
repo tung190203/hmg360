@@ -50,11 +50,13 @@ class ContentController extends Controller
 
                 if (isset($dbPanoramas[$title])) {
                     $dbPanoramas[$title]->update([
-                        'ids' => json_encode($pn['ids'])
+                        'ids' => json_encode($pn['ids']),
+                        'label_audio' => $pn['label_audio'] ?? null,
                     ]);
                 } else {
                     Panorama::create([
                         'vrtour_id' => $vrtour_id,
+                        'label_audio' => $pn['label_audio'] ?? null,
                         'ids'       => json_encode($pn['ids']),
                         'title'     => $title,
                         'user_id'   => Auth::id()

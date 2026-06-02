@@ -32,6 +32,8 @@
                 <form action="{{ route('backend_vrtour_content_store', $pano->id) }}" method="post" enctype="multipart/form-data" class="form-horizontal" id="formDataGrid">
                     @csrf
                     <div class="card-body">
+                        <x-forms.input name="ct_label_audio" value="{{ $pano->label_audio }}"
+                                       label="Label Audio" type="text" readonly/>
                         <x-forms.input name="ct_title" value="{{ (old('ct_title') ?: $pano->title) }}"
                                        label="Tiêu đề VN" type="text" :messages="$errors->get('ct_title')"/>
                         <x-forms.input name="ct_title_en" value="{{ (old('ct_title_en') ?: $pano->title_en) }}"

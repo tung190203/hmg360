@@ -11,6 +11,7 @@ class Panorama extends Model
     protected $table = "panorama";
     protected $fillable = [
         'vrtour_id',
+        'label_audio',
         'ids',
         'title',
         'title_en',

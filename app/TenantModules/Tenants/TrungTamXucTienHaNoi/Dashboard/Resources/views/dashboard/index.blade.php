@@ -554,6 +554,7 @@ DashBoard
                                 ['id' => 'location', 'label' => 'Tọa độ', 'count' => $projectStats['has_location'] ?? 0],
                                 ['id' => 'vrtour', 'label' => 'VR Tour 360', 'count' => $projectStats['has_vrtour'] ?? 0],
                                 ['id' => 'legal', 'label' => 'Văn bản pháp quy', 'count' => $projectStats['has_legal'] ?? 0],
+                                ['id' => 'investor', 'label' => 'Đã có chủ đầu tư', 'count' => $projectStats['has_investor'] ?? 0],
                             ];
                         @endphp
                         @foreach($fields as $field)
@@ -562,14 +563,25 @@ DashBoard
                                 $missingCount = max(0, $total - $hasCount);
                                 $percent = $total > 0 ? round(($hasCount / $total) * 100, 1) : 0;
                                 $progressClass = $percent >= 80 ? 'bg-success' : ($percent >= 50 ? 'bg-warning' : 'bg-danger');
+                                $hasList = $hasProjects[$field['id']] ?? collect();
                                 $missingList = $missingProjects[$field['id']] ?? collect();
+                                $showHasList = $hasCount > 0;
+                                $showMissingList = $missingCount > 0;
                             @endphp
                             <tr>
                                 <td class="font-weight-bold">{{ $field['label'] }}</td>
-                                <td class="text-center text-success font-weight-bold">{{ $hasCount }}</td>
+                                <td class="text-center text-success font-weight-bold">
+                                    {{ $hasCount }}
+                                    @if($showHasList)
+                                        <br>
+                                        <button class="btn btn-xs btn-outline-success mt-1" type="button" data-toggle="collapse" data-target="#has-{{ $field['id'] }}" aria-expanded="false" aria-controls="has-{{ $field['id'] }}">
+                                            Xem danh sách
+                                        </button>
+                                    @endif
+                                </td>
                                 <td class="text-center text-danger font-weight-bold">
                                     {{ $missingCount }}
-                                    @if($missingCount > 0)
+                                    @if($showMissingList)
                                         <br>
                                         <button class="btn btn-xs btn-outline-danger mt-1" type="button" data-toggle="collapse" data-target="#missing-{{ $field['id'] }}" aria-expanded="false" aria-controls="missing-{{ $field['id'] }}">
                                             Xem danh sách
@@ -583,7 +595,22 @@ DashBoard
                                     <small class="text-muted d-block text-center mt-1">{{ $percent }}%</small>
                                 </td>
                             </tr>
-                            @if($missingCount > 0)
+                            @if($showHasList)
+                            <tr>
+                                <td colspan="4" class="p-0 border-0">
+                                    <div class="collapse" id="has-{{ $field['id'] }}">
+                                        <div class="p-3 bg-light" style="max-height: 200px; overflow-y: auto;">
+                                            <ul class="list-unstyled mb-0" style="font-size: 13px;">
+                                                @foreach($hasList as $proj)
+                                                    <li class="mb-1"><a href="{{ route('backend_project_edit', $proj->id) }}" target="_blank" class="text-dark"><i class="fas fa-caret-right mr-1 text-muted"></i>{{ $proj->name ?? 'Dự án chưa có tên' }} <i class="fas fa-external-link-alt text-muted ml-1" style="font-size: 10px;"></i></a></li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endif
+                            @if($showMissingList)
                             <tr>
                                 <td colspan="4" class="p-0 border-0">
                                     <div class="collapse" id="missing-{{ $field['id'] }}">

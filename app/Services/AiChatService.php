@@ -29,6 +29,32 @@ class AiChatService
         return array_merge($headers, $extra);
     }
 
+    public function chat(array $payload)
+    {
+        return Http::withHeaders($this->headers())->post($this->baseUrl . '/api/v1/chat', $payload);
+    }
+
+    public function sendFeedback(array $data)
+    {
+        return Http::withHeaders($this->headers())->post($this->baseUrl . '/api/v1/chat/feedback', [
+            'session_id' => $data['session_id'],
+            'message_id' => $data['message_id'],
+            'rating' => $data['rating'],
+            'feedback_type' => $data['feedback_type'] ?? 'helpful',
+            'comment' => $data['comment'] ?? null,
+        ]);
+    }
+
+    public function getSessionHistory($sessionId)
+    {
+        return Http::withHeaders($this->headers())->get($this->baseUrl . '/api/v1/session/' . $sessionId);
+    }
+
+    public function deleteSession($sessionId)
+    {
+        return Http::withHeaders($this->headers())->delete($this->baseUrl . '/api/v1/session/' . $sessionId);
+    }
+
     public function getHealthStatus()
     {
         return Http::withHeaders($this->headers())->timeout(5)->get($this->baseUrl . '/api/v1/health');

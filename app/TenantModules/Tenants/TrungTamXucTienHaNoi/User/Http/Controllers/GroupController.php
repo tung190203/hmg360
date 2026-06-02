@@ -166,6 +166,10 @@ class GroupController extends Controller
             ];
 
             foreach ($modules as $module) {
+                if (isset($permission_configs[$module->slug])) {
+                    continue;
+                }
+
                 $manifest = $module->manifest();
                 $permissions = $manifest['permissions'] ?? [];
 

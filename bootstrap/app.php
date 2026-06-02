@@ -16,7 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'ckCsrfToken',
         ]);
         $middleware->validateCsrfTokens(
-            except: ['ckfinder/*']
+            except: [
+                'ckfinder/*',
+                'ttxt/webhook',
+                'webhooks/ttxt',
+            ]
         );
         $middleware->web(append: [
             \App\Http\Middleware\SecurityHeaders::class,
