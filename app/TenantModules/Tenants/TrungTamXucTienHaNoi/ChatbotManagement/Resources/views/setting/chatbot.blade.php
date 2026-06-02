@@ -53,7 +53,7 @@
                                     </div>
                                 </div>
                                 <div class="card-body p-4">
-                                    <form action="{{ route('backend_setting_save') }}" method="post" enctype="multipart/form-data" class="form-horizontal" id="formDataGrid">
+                                    <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.setting.save') }}" method="post" enctype="multipart/form-data" class="form-horizontal" id="formDataGrid">
                                         @csrf
                                         <ul class="nav nav-tabs modern-tabs mb-4" id="settingTabs" role="tablist">
                                             <li class="nav-item">
@@ -370,7 +370,7 @@
                                     </div>
                                 </div>
                                 <div class="card-body p-4">
-                                    <form action="{{ route('backend_setting_save') }}" method="post" id="usageAlertSettingsForm" class="mb-4">
+                                    <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.setting.save') }}" method="post" id="usageAlertSettingsForm" class="mb-4">
                                         @csrf
                                         <div class="border rounded-lg p-3 bg-light">
                                             <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">

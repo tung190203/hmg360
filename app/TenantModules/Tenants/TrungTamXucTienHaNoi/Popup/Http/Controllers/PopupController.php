@@ -41,7 +41,7 @@ class PopupController extends Controller
         $this->selectedSubMenu('popup');
         $option_column_button = Popup::makeOptionColumnButton();
         $clsDataGrid = new DataGrid();
-        $clsDataGrid->setLinkEdit('backend_popup_edit');
+        $clsDataGrid->setLinkEdit('tenant.trung_tam_xuc_tien_ha_noi.popup.edit');
         $clsDataGrid->addColumnText("link", "Link điều hướng", "width='5%' nowrap ");
         $clsDataGrid->addColumnImage("image", "Hình ảnh", "width='10%' nowrap ", 80);
         $clsDataGrid->addColumnLabel("status_approve", "Trạng thái duyệt", "width='10%' nowrap", 1, '', function ($col, $val, $id, $row) {
@@ -90,7 +90,7 @@ class PopupController extends Controller
         foreach ($update as $key => $value) {
             Popup::where('id', $key)->update($value);
         }
-        return redirect()->route('backend_popup')->with('success', 'Cập nhật thông tin thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.popup.index')->with('success', 'Cập nhật thông tin thành công');
     }
 
     public function edit(Request $request, Popup $popup)
@@ -177,7 +177,7 @@ class PopupController extends Controller
             return back()->withInput()->withErrors(['error' => 'Lỗi không xác định: ' . $ex->getMessage()]);
         }
 
-        return redirect()->route('backend_popup_edit', $popup)->with('success', 'Cập nhật thông tin thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.popup.edit', $popup)->with('success', 'Cập nhật thông tin thành công');
     }
 
     public function approve(Popup $popup)
@@ -221,7 +221,7 @@ class PopupController extends Controller
         $popup->save();
 
         return redirect()
-            ->route('backend_popup_edit', $popup->id)
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.popup.edit', $popup->id)
             ->with('success', 'Duyệt popup thành công ' . ($user->is_super_admin ? '(Đã duyệt)' : '(Chờ duyệt cấp 2)'));
     }
 
@@ -237,7 +237,7 @@ class PopupController extends Controller
         $popup->save();
 
         return redirect()
-            ->route('backend_popup')
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.popup.index')
             ->with('success', 'Từ chối duyệt popup thành công');
     }
 
@@ -248,7 +248,7 @@ class PopupController extends Controller
         }
 
         $this->popup->destroy($id);
-        return redirect()->route('backend_popup')->with('success', 'Xóa popup thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.popup.index')->with('success', 'Xóa popup thành công');
     }
 
     public function bulkDelete(Request $request)

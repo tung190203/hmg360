@@ -7,7 +7,7 @@ return [
     'menu' => [
         'title' => 'VR Tour',
         'icon' => 'fas fa-vr-cardboard',
-        'route' => 'legacy.vr-tour.index',
+        'route' => 'tenant.trung_tam_xuc_tien_ha_noi.vr_tour.index',
         'section' => 'content',
         'sort_order' => 90,
     ],
@@ -20,20 +20,20 @@ return [
             'items' => [
                 'skin' => [
                     'title' => 'Skin',
-                    'route' => 'backend_vrtour_skin_index',
+                    'route' => 'tenant.trung_tam_xuc_tien_ha_noi.vr_tour.skin.index',
                 ],
                 'hotspot' => [
                     'title' => 'Hotspot',
-                    'route' => 'backend_vrtour_hotspot_index',
+                    'route' => 'tenant.trung_tam_xuc_tien_ha_noi.vr_tour.hotspot.index',
                 ],
                 'content' => [
                     'title' => 'Nội dung',
-                    'route' => 'backend_vrtour_content_index',
+                    'route' => 'tenant.trung_tam_xuc_tien_ha_noi.vr_tour.content.index',
                 ],
             ],
         ],
     ],
-    'table_route' => 'legacy.vr-tour.table',
+    'table_route' => 'tenant.trung_tam_xuc_tien_ha_noi.vr_tour.index',
     'tables' => ['hotspot', 'panorama'],
     'permissions' => ['view', 'create', 'update', 'delete'],
 ];

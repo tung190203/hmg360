@@ -7,7 +7,7 @@ return [
     'menu' => [
         'title' => 'Người dùng',
         'icon' => 'fas fa-users',
-        'route' => 'backend_guest',
+        'route' => 'tenant.trung_tam_xuc_tien_ha_noi.guest.index',
         'section' => 'content',
         'sort_order' => 60,
     ],

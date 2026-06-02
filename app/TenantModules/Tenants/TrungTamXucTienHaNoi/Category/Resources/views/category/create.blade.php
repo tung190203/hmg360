@@ -6,7 +6,7 @@
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('backend_category') }}">Danh mục</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.category.index') }}">Danh mục</a></li>
     <li class="breadcrumb-item active">{{ $category->exists ? 'Sửa danh mục' : 'Thêm mới danh mục' }}</li>
 @endsection
 
@@ -32,11 +32,11 @@
                         @if($category->exists)
                             @can('category/add')
                                 <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                                    url="{{ route('backend_category_create') }}"/>
+                                                    url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.category.create') }}"/>
                             @endcan
                             @can('category/delete')
                                 <x-forms.button-url title="Xóa" class="btn-danger" icon="fa fa-trash"
-                                                    url="{{ route('backend_category_delete', $category->id) }}"/>
+                                                    url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.category.delete', $category->id) }}"/>
                             @endcan
                             @if(
                                 (auth('web')->user()->is_super_admin || auth('web')->user()->is_approve) &&
@@ -66,11 +66,11 @@
                                                 </p>
                                             </div>
                                             <div class="modal-footer">
-                                                <form action="{{ route('backend_category_reject', $category->id) }}" method="post" class="d-inline">
+                                                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.category.reject', $category->id) }}" method="post" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-danger fw-bold">Yêu cầu chỉnh sửa</button>
                                                 </form>
-                                                <form action="{{ route('backend_category_approve', $category->id) }}" method="post" class="d-inline">
+                                                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.category.approve', $category->id) }}" method="post" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-success fw-bold">Duyệt danh mục</button>
                                                 </form>
@@ -84,7 +84,7 @@
                 </div>
             </div>
             <div class="card card-primary">
-                <form action="{{ route('backend_category_save', $category) }}" method="post"
+                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.category.save', $category) }}" method="post"
                       enctype="multipart/form-data"
                       class="form-horizontal" id="formDataGrid">
                     @csrf

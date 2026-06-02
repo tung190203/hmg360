@@ -53,7 +53,7 @@ class UserController extends Controller
 
         $users = $query->paginate($paginate);
 
-        $route_name = 'backend_user_edit';
+        $route_name = 'tenant.trung_tam_xuc_tien_ha_noi.user.users.edit';
         $option_column_button = User::makeOptionColumnButton();
 
         $clsDataGrid = new DataGrid();
@@ -247,7 +247,7 @@ class UserController extends Controller
             }
 
             return redirect()
-                ->route('backend_user_edit', ['id' => $user->id])
+                ->route('tenant.trung_tam_xuc_tien_ha_noi.user.users.edit', ['id' => $user->id])
                 ->with('success', 'Lưu dữ liệu thành công ' . (
                     $checkUser->is_super_admin ? '(Đã duyệt)' : ($checkUser->is_approve ? '(Chờ duyệt cấp 2)' : '')
                 ));
@@ -306,7 +306,7 @@ class UserController extends Controller
         }
 
         return redirect()
-            ->route('backend_user_edit', ['id' => $user->id])
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.user.users.edit', ['id' => $user->id])
             ->with('success', 'Duyệt người dùng thành công ' . ($checkUser->is_super_admin ? '(Đã duyệt)' : '(Chờ duyệt cấp 2)'));
     }
     public function reject($id)
@@ -322,7 +322,7 @@ class UserController extends Controller
         $user->save();
 
         return redirect()
-            ->route('backend_user')
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.user.users.index')
             ->with('success', 'Từ chối duyệt user thành công');
     }
 
@@ -336,7 +336,7 @@ class UserController extends Controller
             abort('403');
         }
         $this->user->destroy($id);
-        return redirect()->to(route('backend_user'))->with('success', 'Xóa user thành công');
+        return redirect()->to(route('tenant.trung_tam_xuc_tien_ha_noi.user.users.index'))->with('success', 'Xóa user thành công');
     }
     protected function addUserToScope($user, $userId)
     {

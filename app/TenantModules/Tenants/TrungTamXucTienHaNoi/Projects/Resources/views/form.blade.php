@@ -5,7 +5,7 @@
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('backend_project') }}">Dự án</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.index') }}">Dự án</a></li>
     <li class="breadcrumb-item active">{{ $project->exists ? 'Sửa dự án' : 'Thêm mới dự án' }}</li>
 @endsection
 
@@ -30,17 +30,17 @@
                         <x-forms.button-save />
                     @endif
                     @if($project->exists && $canCreate)
-                        <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus" url="{{ route('backend_project_create') }}" />
+                        <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus" url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.create') }}" />
                     @endif
                     @if($project->exists && $canDelete)
-                        <x-forms.button-url title="Xóa" class="btn-danger" icon="fa fa-trash" url="{{ route('backend_project_delete', $project) }}" />
+                        <x-forms.button-url title="Xóa" class="btn-danger" icon="fa fa-trash" url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.delete', $project) }}" />
                     @endif
                 </div>
             </div>
         </div>
 
         <div class="card card-primary">
-            <form action="{{ route('backend_project_save', $project->exists ? $project : null) }}" method="post" enctype="multipart/form-data" class="form-horizontal" id="formDataGrid">
+            <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.save', $project->exists ? $project : null) }}" method="post" enctype="multipart/form-data" class="form-horizontal" id="formDataGrid">
                 @csrf
                 <div class="card-body">
                     @if($errors->any())

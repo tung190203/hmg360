@@ -242,7 +242,7 @@ class User extends Authenticatable
         foreach (['edit', 'delete'] as $action) {
             if (Gate::allows('user/' . $action)) {
                 $options[$action] = [
-                    'route' => 'backend_user_' . $action,
+                    'route' => 'tenant.trung_tam_xuc_tien_ha_noi.user.users.' . $action,
                 ];
             }
         }

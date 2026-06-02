@@ -12,11 +12,11 @@ return [
         'items' => [
             'users' => [
                 'title' => 'Users',
-                'route' => 'backend_user',
+                'route' => 'tenant.trung_tam_xuc_tien_ha_noi.user.users.index',
             ],
             'groups' => [
                 'title' => 'Groups',
-                'route' => 'backend_group',
+                'route' => 'tenant.trung_tam_xuc_tien_ha_noi.user.groups.index',
             ],
         ],
     ],

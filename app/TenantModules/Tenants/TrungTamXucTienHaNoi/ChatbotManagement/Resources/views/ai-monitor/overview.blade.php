@@ -271,7 +271,7 @@ $(function() {
     function loadStats() {
         // Advanced stats for Activity
         $.ajax({
-            url: "{{ route('backend_ai_monitor_advanced_stats') }}",
+            url: "{{ route('tenant.trung_tam_xuc_tien_ha_noi.chatbot_management.ai_monitor.advanced_stats') }}",
             type: 'GET',
             success: function(res) {
                 if(res.success && res.data) {
@@ -282,7 +282,7 @@ $(function() {
 
         // Extra stats for Health, Latency, Fallback
         $.ajax({
-            url: "{{ route('backend_ai_monitor_extra_stats') }}",
+            url: "{{ route('tenant.trung_tam_xuc_tien_ha_noi.chatbot_management.ai_monitor.extra_stats') }}",
             type: 'GET',
             success: function(res) {
                 if(res.success && res.data) {

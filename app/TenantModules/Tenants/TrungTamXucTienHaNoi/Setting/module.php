@@ -12,19 +12,19 @@ return [
         'items' => [
             'general' => [
                 'title' => 'Cấu hình chung',
-                'route' => 'backend_setting_general',
+                'route' => 'tenant.trung_tam_xuc_tien_ha_noi.setting.general',
             ],
             'author' => [
                 'title' => 'Tác giả',
-                'route' => 'backend_setting_author',
+                'route' => 'tenant.trung_tam_xuc_tien_ha_noi.setting.author',
             ],
             'social' => [
                 'title' => 'Mạng xã hội',
-                'route' => 'backend_setting_social',
+                'route' => 'tenant.trung_tam_xuc_tien_ha_noi.setting.social',
             ],
             'seo' => [
                 'title' => 'SEO',
-                'route' => 'backend_setting_seo',
+                'route' => 'tenant.trung_tam_xuc_tien_ha_noi.setting.seo',
             ],
         ],
     ],

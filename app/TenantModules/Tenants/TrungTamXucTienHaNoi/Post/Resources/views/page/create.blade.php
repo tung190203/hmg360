@@ -6,7 +6,7 @@
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('backend_page') }}">Trang nội dung</a></li>
+    <li class="breadcrumb-item"><a href="#">Trang nội dung</a></li>
     <li class="breadcrumb-item active">{{ $page->exists ? 'Sửa trang nội dung' : 'Thêm mới trang nội dung' }}</li>
 @endsection
 
@@ -28,18 +28,18 @@
                         @if($page->exists)
                             @can('page/add')
                                 <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                                    url="{{ route('backend_page_create') }}"/>
+                                                    url="#"/>
                             @endcan
                             @can('page/delete')
                                 <x-forms.button-url title="Xóa" class="btn-danger" icon="fa fa-trash"
-                                                    url="{{ route('backend_page_delete', $page->id) }}"/>
+                                                    url="#"/>
                             @endcan
                         @endif
                     </div>
                 </div>
             </div>
             <div class="card card-primary">
-                <form action="{{ route('backend_page_save', $page) }}" method="post"
+                <form action="#" method="post"
                       enctype="multipart/form-data"
                       class="form-horizontal" id="formDataGrid">
                     @csrf

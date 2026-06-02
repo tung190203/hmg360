@@ -6,7 +6,7 @@
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('backend_vrtour_hotspot_index') }}">Hotspot</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.vr_tour.hotspot.index') }}">Hotspot</a></li>
     <li class="breadcrumb-item active">Sửa hotspot</li>
 @endsection
 
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="card card-primary">
-                <form action="{{ route('backend_vrtour_hotspot_store', $hotspot->id) }}" method="post" enctype="multipart/form-data" class="form-horizontal" id="formDataGrid">
+                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.vr_tour.hotspot.store', $hotspot->id) }}" method="post" enctype="multipart/form-data" class="form-horizontal" id="formDataGrid">
                     @csrf
                     <div class="card-body">
                         <x-forms.upload name="hp_url" value="{{ old('hp_url') ?: $hotspot->url }}" label="Ảnh VN"

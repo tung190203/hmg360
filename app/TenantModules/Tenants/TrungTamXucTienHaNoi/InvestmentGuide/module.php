@@ -7,7 +7,7 @@ return [
     'menu' => [
         'title' => 'Cẩm nang đầu tư',
         'icon' => 'fas fa-book',
-        'route' => 'backend_investment_guide',
+        'route' => 'tenant.trung_tam_xuc_tien_ha_noi.investment_guide.index',
         'section' => 'content',
         'sort_order' => 40,
     ],

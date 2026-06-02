@@ -6,7 +6,7 @@
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('backend_vrtour_content_index') }}">Nội dung</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.vr_tour.content.index') }}">Nội dung</a></li>
     <li class="breadcrumb-item active">Sửa nội dung</li>
 @endsection
 
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="card card-primary">
-                <form action="{{ route('backend_vrtour_content_store', $pano->id) }}" method="post" enctype="multipart/form-data" class="form-horizontal" id="formDataGrid">
+                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.vr_tour.content.store', $pano->id) }}" method="post" enctype="multipart/form-data" class="form-horizontal" id="formDataGrid">
                     @csrf
                     <div class="card-body">
                         <x-forms.input name="ct_label_audio" value="{{ $pano->label_audio }}"

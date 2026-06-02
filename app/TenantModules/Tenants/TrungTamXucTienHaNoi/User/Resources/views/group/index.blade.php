@@ -25,7 +25,7 @@
                     <div class="float-right mb-3">
                         @can('group/add')
                             <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                                url="{{ route('backend_group_create') }}"/>
+                                                url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.user.groups.create') }}"/>
                         @endcan
                     </div>
                 </div>

@@ -292,7 +292,7 @@ DashBoard
     <div class="card card-outline card-info shadow-none bg-transparent">
         <div class="card-header border-0 pl-0">
             <h3 class="card-title text-bold">
-                <a href="{{ route('backend_chatbot_overview') }}" class="text-dark">
+                <a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.chatbot_management.ai_monitor.overview') }}" class="text-dark">
                     <i class="fas fa-robot mr-2 text-info"></i>
                     BÁO CÁO & THỐNG KÊ AI CHATBOT <i class="fas fa-external-link-alt ml-1 text-xs text-muted"></i>
                 </a>
@@ -355,7 +355,7 @@ DashBoard
                     <div class="card ai-stat-card card-health h-100">
                         <div class="card-header bg-white border-0 pb-0">
                             <h3 class="card-title text-sm text-bold text-dark">
-                                <a href="{{ route('backend_chatbot_overview') }}" class="text-dark"><i class="fas fa-server mr-1 text-success"></i> Trạng thái Hệ thống</a>
+                                <a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.chatbot_management.ai_monitor.overview') }}" class="text-dark"><i class="fas fa-server mr-1 text-success"></i> Trạng thái Hệ thống</a>
                             </h3>
                         </div>
                         <div class="card-body p-3">
@@ -369,7 +369,7 @@ DashBoard
                     <div class="card ai-stat-card card-performance h-100">
                         <div class="card-header bg-white border-0 pb-0">
                             <h3 class="card-title text-sm text-bold text-dark">
-                                <a href="{{ route('backend_chatbot_overview') }}" class="text-dark"><i class="fas fa-bolt mr-1 text-primary"></i> Hiệu suất & Fallback</a>
+                                <a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.chatbot_management.ai_monitor.overview') }}" class="text-dark"><i class="fas fa-bolt mr-1 text-primary"></i> Hiệu suất & Fallback</a>
                             </h3>
                         </div>
                         <div class="card-body p-3">
@@ -382,7 +382,7 @@ DashBoard
                     <div class="card ai-stat-card card-questions h-100">
                         <div class="card-header bg-white border-0 pb-0">
                             <h3 class="card-title text-sm text-bold text-dark">
-                                <a href="{{ route('backend_chatbot_overview') }}" class="text-dark"><i class="fas fa-comment-alt mr-1 text-purple"></i> Câu hỏi phổ biến</a>
+                                <a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.chatbot_management.ai_monitor.overview') }}" class="text-dark"><i class="fas fa-comment-alt mr-1 text-purple"></i> Câu hỏi phổ biến</a>
                             </h3>
                         </div>
                         <div class="card-body p-3" style="max-height: 280px; overflow-y: auto;">
@@ -496,7 +496,7 @@ DashBoard
                         Nhật ký hoạt động
                     </h3>
                     <div class="card-tools">
-                        <form id="activity-log-filter" action="{{ route('backend_dashboard') }}" method="GET" class="form-inline">
+                        <form id="activity-log-filter" action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.dashboard.index') }}" method="GET" class="form-inline">
                             <input type="hidden" name="range" value="{{ $range }}">
                             <select name="event_log" class="form-control form-control-sm mr-2">
                                 <option value="">Tất cả sự kiện</option>
@@ -602,7 +602,7 @@ DashBoard
                                         <div class="p-3 bg-light" style="max-height: 200px; overflow-y: auto;">
                                             <ul class="list-unstyled mb-0" style="font-size: 13px;">
                                                 @foreach($hasList as $proj)
-                                                    <li class="mb-1"><a href="{{ route('backend_project_edit', $proj->id) }}" target="_blank" class="text-dark"><i class="fas fa-caret-right mr-1 text-muted"></i>{{ $proj->name ?? 'Dự án chưa có tên' }} <i class="fas fa-external-link-alt text-muted ml-1" style="font-size: 10px;"></i></a></li>
+                                                    <li class="mb-1"><a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.edit', $proj->id) }}" target="_blank" class="text-dark"><i class="fas fa-caret-right mr-1 text-muted"></i>{{ $proj->name ?? 'Dự án chưa có tên' }} <i class="fas fa-external-link-alt text-muted ml-1" style="font-size: 10px;"></i></a></li>
                                                 @endforeach
                                             </ul>
                                         </div>
@@ -617,7 +617,7 @@ DashBoard
                                         <div class="p-3 bg-light" style="max-height: 200px; overflow-y: auto;">
                                             <ul class="list-unstyled mb-0" style="font-size: 13px;">
                                                 @foreach($missingList as $proj)
-                                                    <li class="mb-1"><a href="{{ route('backend_project_edit', $proj->id) }}" target="_blank" class="text-dark"><i class="fas fa-caret-right mr-1 text-muted"></i>{{ $proj->name ?? 'Dự án chưa có tên' }} <i class="fas fa-external-link-alt text-muted ml-1" style="font-size: 10px;"></i></a></li>
+                                                    <li class="mb-1"><a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.edit', $proj->id) }}" target="_blank" class="text-dark"><i class="fas fa-caret-right mr-1 text-muted"></i>{{ $proj->name ?? 'Dự án chưa có tên' }} <i class="fas fa-external-link-alt text-muted ml-1" style="font-size: 10px;"></i></a></li>
                                                 @endforeach
                                             </ul>
                                         </div>
@@ -631,7 +631,7 @@ DashBoard
             </div>
             <div class="modal-footer bg-light">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <a href="{{ route('backend_project') }}" class="btn btn-primary"><i class="fas fa-edit mr-1"></i>Đi đến Quản lý dự án</a>
+                <a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.index') }}" class="btn btn-primary"><i class="fas fa-edit mr-1"></i>Đi đến Quản lý dự án</a>
             </div>
         </div>
     </div>
@@ -647,7 +647,7 @@ DashBoard
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('backend_dashboard_export_logs') }}" method="GET">
+            <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.dashboard.export_logs') }}" method="GET">
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Chọn khoảng thời gian (theo tháng gần đây):</label>
@@ -1026,7 +1026,7 @@ DashBoard
 
         function updateAdvancedAiStats() {
             $.ajax({
-                url: "{{ route('backend_ai_monitor_advanced_stats') }}",
+                url: "{{ route('tenant.trung_tam_xuc_tien_ha_noi.chatbot_management.ai_monitor.advanced_stats') }}",
                 type: 'GET',
                 success: function(response) {
                     if (response.success) {
@@ -1160,7 +1160,7 @@ DashBoard
         // Extra AI Stats
         function updateExtraAiStats() {
             $.ajax({
-                url: "{{ route('backend_ai_monitor_extra_stats') }}",
+                url: "{{ route('tenant.trung_tam_xuc_tien_ha_noi.chatbot_management.ai_monitor.extra_stats') }}",
                 type: 'GET',
                 success: function(response) {
                     if (response.success && response.data) {

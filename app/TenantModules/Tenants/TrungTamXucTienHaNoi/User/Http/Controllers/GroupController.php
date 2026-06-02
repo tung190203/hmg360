@@ -33,7 +33,7 @@ class GroupController extends Controller
         $groups = $query->paginate(20);
 
         $paginate = 20;
-        $route_name = 'backend_group_edit';
+        $route_name = 'tenant.trung_tam_xuc_tien_ha_noi.user.groups.edit';
         $option_column_button = Group::makeOptionColumnButton();
 
         $clsDataGrid = new DataGrid();
@@ -118,7 +118,7 @@ class GroupController extends Controller
         $group->scope_data = $scope_data;
         $group->save();
 
-        return redirect()->route('backend_group_edit', $group)->with('success', 'Cập nhật thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.user.groups.edit', $group)->with('success', 'Cập nhật thành công');
     }
 
     protected function _processPermission($permission_data, $permission_map, $permission_input, $prefix = '')
@@ -144,7 +144,7 @@ class GroupController extends Controller
             abort(403, self::MESSAGE_UNAUTHORIZED);
         }
         $this->group->destroy($id);
-        return redirect()->to(route('backend_group'))->with('success', 'Xóa thành công');
+        return redirect()->to(route('tenant.trung_tam_xuc_tien_ha_noi.user.groups.index'))->with('success', 'Xóa thành công');
     }
 
     protected function getPermissionConfigs()

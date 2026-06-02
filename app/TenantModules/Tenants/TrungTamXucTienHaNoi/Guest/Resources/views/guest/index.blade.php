@@ -47,15 +47,15 @@ Quản lý khách hàng
                 <div class="float-right mb-3">
                     @can('guest')
                     <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                        url="{{ route('backend_guest_create') }}" />
+                        url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.guest.create') }}" />
                     @endcan
                     @can('guest')
-                    <x-forms.button-bulk-delete url="{{ route('backend_guest_bulk_delete')}}" />
+                    <x-forms.button-bulk-delete url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.guest.bulk_delete')}}" />
                     @endcan
                 </div>
             </div>
         </div>
-        <form method="post" action="{{ route('backend_guest_save_data_index') }}" id="formDataGrid">
+        <form method="post" action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.guest.save_data_index') }}" id="formDataGrid">
             {{ csrf_field() }}
             <div class="row">
                 <div class="col-12">

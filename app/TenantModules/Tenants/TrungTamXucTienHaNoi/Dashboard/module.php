@@ -7,7 +7,7 @@ return [
     'menu' => [
         'title' => 'Dashboard',
         'icon' => 'fas fa-tachometer-alt',
-        'route' => 'backend_dashboard',
+        'route' => 'tenant.trung_tam_xuc_tien_ha_noi.dashboard.index',
         'section' => 'content',
         'sort_order' => 10,
     ],

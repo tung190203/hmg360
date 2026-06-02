@@ -7,7 +7,7 @@ return [
     'menu' => [
         'title' => 'Danh mục',
         'icon' => 'fas fa-folder',
-        'route' => 'backend_category',
+        'route' => 'tenant.trung_tam_xuc_tien_ha_noi.category.index',
         'section' => 'content',
         'sort_order' => 20,
     ],

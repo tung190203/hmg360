@@ -73,6 +73,31 @@ Platform owner và tenant user nhìn sidebar khác nhau:
 - Tenant user/organizer mới thấy module nghiệp vụ của tenant qua `ModuleManager::menuForTenant($user->tenant)`.
 - Vì vậy owner thấy tenant có 13 module không có nghĩa là owner sẽ thấy 13 mục nghiệp vụ trong sidebar.
 
+### Quy ước route multi-tenant bắt buộc
+
+Route tenant module phải được scope theo tenant. Không dùng route global cho module nghiệp vụ nếu module đó có thể tồn tại ở nhiều tenant.
+
+Quy ước chuẩn:
+
+```text
+URI prefix:        backend/tenants/{tenant}/modules/{module}
+Route name prefix: tenant.{tenant_route_key}.{module_route_key}.
+Middleware path:  Tenants/{tenant_studly}/{module_studly}
+Menu route:       tenant.{tenant_route_key}.{module_route_key}.index
+```
+
+Ví dụ với tenant `hoa-lac`, module `projects`:
+
+```text
+URI:              backend/tenants/hoa-lac/modules/projects
+Route name:       tenant.hoa_lac.projects.index
+Middleware:       module.enabled:projects,Tenants/HoaLac/Projects
+modules.path:     Tenants/HoaLac/Projects
+module.php route: tenant.hoa_lac.projects.index
+```
+
+Không copy quy ước legacy từ tenant đầu như `backend/project`, `backend_project`, `backend/modules/projects` cho tenant mới. Các route/name đó là global, không chứa tenant, nên khi có nhiều tenant cùng module Laravel có thể match route của tenant khác và middleware sẽ báo `Module chưa khả dụng`.
+
 ## 2. Quy Trình Tạo Tenant Mới
 
 ### Bước 1: Tạo database tenant trên MySQL
@@ -296,8 +321,16 @@ foreach (\File::directories($basePath) as $moduleDir) {
     $slug = $manifest['slug'] ?? \Illuminate\Support\Str::kebab($folder)->toString();
     $permissions = $manifest['permissions'] ?? ['view', 'create', 'update', 'delete'];
     $menu = $manifest['menu'] ?? null;
-    $hasMenuItems = is_array($manifest['menu_items'] ?? null);
-    $config = $hasMenuItems ? null : (is_array($menu) ? ['menu' => $menu] : null);
+    $menuItems = $manifest['menu_items'] ?? null;
+    $config = $manifest;
+
+    if (! is_array($config['menu'] ?? null) && is_array($menuItems)) {
+        $firstMenuItem = collect($menuItems)->first(fn ($item) => is_array($item));
+
+        if (is_array($firstMenuItem)) {
+            $config['menu'] = $firstMenuItem;
+        }
+    }
 
     \App\Core\Module\Module::updateOrCreate(
         ['tenant_id' => $tenant->id, 'slug' => $slug],
@@ -393,7 +426,7 @@ php artisan optimize:clear
 php artisan tenant:module-list {tenant}
 ```
 
-Login bằng organizer và vào `/backend/dashboard`.
+Login bằng organizer và vào `/backend/tenants/trung-tam-xuc-tien-ha-noi/modules/dashboard`.
 
 ## 3. Tạo Module Mới Cho Tenant
 
@@ -503,6 +536,28 @@ Quan trọng:
 - Luôn có `tenant.db` trước khi dùng model tenant.
 - Hệ thống đã cấu hình middleware priority để `tenant.db` chạy trước `SubstituteBindings`. Vì vậy implicit binding `{report}` dùng được nếu model dùng connection `tenant`.
 - `module.enabled:{slug},{path}` giúp chặn module chưa bật hoặc sai path.
+- `prefix()` phải có tenant slug: `backend/tenants/{tenant}/modules/{module}`.
+- `name()` phải có tenant route key: `tenant.{tenant_route_key}.{module_route_key}.`.
+- Không dùng lại route name global kiểu `backend_project`, `backend_vrtour_skin_index` cho tenant mới.
+- `module.php['menu']['route']` phải trỏ tới route scoped, ví dụ `tenant.{tenant_route_key}.{module_route_key}.index`.
+
+Nếu route chỉ render view placeholder bằng closure, phải truyền biến sidebar vì closure không đi qua base `Controller` để share biến:
+
+```php
+Route::get('/', fn () => view('tenant-{tenant}-{module}::index', [
+    'selectedMainMenu' => '{module}',
+    'selectedSubMenu' => '',
+]))->name('index');
+```
+
+Khi đã có controller riêng, nên set menu active trong controller:
+
+```php
+class {ModuleSingular}Controller extends Controller
+{
+    protected string $selectedMainMenu = '{module}';
+}
+```
 
 ### Bước 4: Tạo model dùng tenant connection
 
@@ -876,6 +931,58 @@ Nếu route không tồn tại, menu sẽ bị `ModuleManager` lọc ra.
 
 Nếu chỉ một vài module hiện dù `tenant:module-list` có nhiều module, thường là các module hiện có `menu` hợp lệ, còn module ẩn chưa có `config.menu` hoặc `module.php['menu']`.
 
+### Báo `Module chưa khả dụng`
+
+Thông báo này đến từ middleware `module.enabled`. Module đã enabled trong platform chưa chắc đã pass middleware; middleware còn kiểm tra tenant của user và path trong route.
+
+Kiểm tra theo thứ tự:
+
+```php
+auth()->user()->tenant?->slug;
+
+$tenant = \App\Core\Tenant\Tenant::where('slug', '{tenant}')->firstOrFail();
+
+\App\Core\Module\Module::where('tenant_id', $tenant->id)
+    ->where('slug', '{module}')
+    ->first(['slug', 'path', 'is_enabled', 'config'])
+    ->toArray();
+```
+
+Route đang truy cập phải có middleware path khớp `modules.path`:
+
+```text
+module.enabled:{module},Tenants/{tenant_studly}/{module_studly}
+modules.path = Tenants/{tenant_studly}/{module_studly}
+```
+
+Nếu tenant mới copy module từ tenant cũ mà vẫn truy cập route global như `backend/project` hoặc route name `backend_project`, request có thể đang vào route tenant cũ. Khi đó middleware nhận path cũ, ví dụ `Tenants/TrungTamXucTienHaNoi/Projects`, nên user tenant mới bị chặn.
+
+Debug route:
+
+```bash
+php artisan route:list | grep {module}
+php artisan route:list --path=backend/tenants/{tenant}/modules/{module} -v
+```
+
+### Báo lỗi 500 `Undefined variable $selectedMainMenu`
+
+Lỗi này thường xảy ra khi route closure render view extend `backend.index` nhưng không truyền biến cho sidebar.
+
+Sửa closure:
+
+```php
+Route::get('/', fn () => view('tenant-{tenant}-{module}::index', [
+    'selectedMainMenu' => '{module}',
+    'selectedSubMenu' => '',
+]))->name('index');
+```
+
+Hoặc dùng controller kế thừa `App\Http\Controllers\Controller` và set:
+
+```php
+protected string $selectedMainMenu = '{module}';
+```
+
 ## 6. Checklist Tạo Tenant Mới
 
 1. Tạo database vật lý cho tenant.
@@ -886,17 +993,20 @@ Nếu chỉ một vài module hiện dù `tenant:module-list` có nhiều module
 6. Chạy migration module nếu module có file migration.
 7. Nếu tenant DB đã có sẵn user, chạy `php artisan tenant:sync-users {tenant}`.
 8. Tạo organizer/user nếu chưa có.
-9. Chạy `php artisan optimize:clear`.
-10. Login bằng tenant organizer, không dùng platform owner để kiểm tra module nghiệp vụ.
-11. Kiểm tra menu module và mở từng route chính.
-12. Tạo group permission cho user thường.
-13. Tạo user thường và test các route create/edit/delete.
+9. Đảm bảo route module dùng prefix scoped `backend/tenants/{tenant}/modules/{module}`.
+10. Đảm bảo route name module dùng prefix scoped `tenant.{tenant_route_key}.{module_route_key}.`.
+11. Đảm bảo `module.php['menu']['route']` trỏ tới route scoped đang tồn tại.
+12. Chạy `php artisan optimize:clear`.
+13. Login bằng tenant organizer, không dùng platform owner để kiểm tra module nghiệp vụ.
+14. Kiểm tra menu module và mở từng route chính.
+15. Tạo group permission cho user thường.
+16. Tạo user thường và test các route create/edit/delete.
 
 ## 7. Checklist Tạo Module Mới
 
 1. `php artisan tenant:module-create {tenant} "{module_name}" --slug={module}`, hoặc tự tạo folder và register module thủ công vào bảng `modules`.
 2. Sửa `module.php`: name, slug, namespace view, menu, permissions.
-3. Sửa `routes.php`: prefix, route name, middleware đúng slug/path.
+3. Sửa `routes.php`: prefix có tenant, route name có tenant, middleware đúng slug/path.
 4. Tạo model với connection `tenant`.
 5. Tạo migration trong `Database/migrations` nếu module cần schema mới.
 6. Chạy `php artisan tenant:module-migrate {tenant} {module} --force` sau khi đã có file migration; nếu không có migration thì bỏ qua.
@@ -908,6 +1018,8 @@ Nếu chỉ một vài module hiện dù `tenant:module-list` có nhiều module
 
 ## 8. Quy Ước Đặt Tên
 
+Quy ước trong phần này là quy ước chuẩn cho module tenant mới. Một số module cũ của tenant đầu đang dùng route/name global kiểu `backend_project`, `backend/project`, `backend_vrtour_*`; đó là legacy, không dùng làm mẫu khi copy sang tenant khác.
+
 ### Tenant
 
 ```text
@@ -916,6 +1028,13 @@ Tenant slug: demo-tenant
 Tenant studly: DemoTenant
 DB: tenant_demo
 ```
+
+Quy tắc:
+
+- `Tenant slug` dùng kebab-case, ví dụ `hoa-lac`.
+- `Tenant studly` dùng `Str::studly($tenant->slug)`, ví dụ `HoaLac`.
+- Folder source tenant là `app/TenantModules/Tenants/{tenant_studly}`.
+- Không tự đặt folder khác với `Str::studly($tenant->slug)` nếu không có lý do đặc biệt, vì `modules.path` và middleware path sẽ dễ lệch.
 
 ### Module
 
@@ -928,6 +1047,32 @@ Route name prefix: tenant.demo_tenant.reports.
 View namespace: tenant-demo-tenant-reports
 Permission keys: reports.view, reports.create, reports.update, reports.delete
 ```
+
+Với tenant `hoa-lac`, module `projects`, quy ước đúng là:
+
+```text
+Folder: app/TenantModules/Tenants/HoaLac/Projects
+modules.slug: projects
+modules.path: Tenants/HoaLac/Projects
+Middleware: module.enabled:projects,Tenants/HoaLac/Projects
+Route prefix: backend/tenants/hoa-lac/modules/projects
+Route name prefix: tenant.hoa_lac.projects.
+Index route name: tenant.hoa_lac.projects.index
+Menu route: tenant.hoa_lac.projects.index
+View namespace: tenant-hoa-lac-projects
+```
+
+Không dùng cho tenant mới:
+
+```text
+Route prefix: backend/project
+Route prefix: backend/modules/projects
+Route name: backend_project
+Route name: backend_project_create
+Route name: backend_vrtour_skin_index
+```
+
+Các route/name trên không chứa tenant nên chỉ phù hợp với code legacy một tenant. Khi copy module sang tenant khác, phải đổi sang route scoped; nếu không menu hoặc URL sẽ chạy nhầm route tenant cũ.
 
 ## 9. Lệnh Thường Dùng
 
@@ -973,10 +1118,12 @@ php artisan tenant:sync-users demo-tenant
 - Không query data nghiệp vụ trên DB trung tâm.
 - Mọi model nghiệp vụ phải dùng connection `tenant`.
 - Mọi route tenant phải có `tenant.db` và `module.enabled`.
+- Mọi route module tenant mới phải scope theo tenant trong cả URI và route name.
 - Không dùng route model binding nếu route không chạy `tenant.db`.
 - Permission nên check trong controller, không chỉ ẩn/hiện button ở view.
 - Migration tenant module phải đặt trong module và chỉ chạy qua `tenant:module-migrate` sau khi file migration đã tồn tại.
 - Module muốn hiện sidebar phải khai báo menu rõ ràng: `modules.config.menu`, `module.php['menu']`, hoặc `module.php['menu_items']`.
 - Menu route phải là route name đang tồn tại; nếu route không tồn tại, menu sẽ bị lọc.
+- Không copy route/name global từ tenant legacy sang tenant mới.
 - View namespace nên lấy từ `module.php`, không hardcode lung tung.
 - Sau khi đổi route/view/config, chạy `php artisan optimize:clear`.

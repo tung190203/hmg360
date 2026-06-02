@@ -22,7 +22,7 @@ class Popup extends Model
         foreach (['edit', 'delete'] as $action) {
             if (Gate::allows('popup/' . $action)) {
                 $options[$action] = [
-                    'route' => 'backend_popup_' . $action,
+                    'route' => 'tenant.trung_tam_xuc_tien_ha_noi.popup.' . $action,
                 ];
             }
         }

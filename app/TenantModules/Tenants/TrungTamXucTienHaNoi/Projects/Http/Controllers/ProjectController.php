@@ -139,7 +139,7 @@ class ProjectController extends Controller
         $project->save();
         $project->districts()->sync($request->input('districts', []));
 
-        return redirect()->route('backend_project_edit', $project)->with('success', 'Lưu dữ liệu thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.projects.edit', $project)->with('success', 'Lưu dữ liệu thành công');
     }
 
     public function saveDataIndex(Request $request)
@@ -150,7 +150,7 @@ class ProjectController extends Controller
             Project::whereKey($id)->update($values);
         }
 
-        return redirect()->route('backend_project')->with('success', 'Cập nhật thông tin thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.projects.index')->with('success', 'Cập nhật thông tin thành công');
     }
 
     public function delete(int|string $project)
@@ -160,7 +160,7 @@ class ProjectController extends Controller
         $project->districts()->detach();
         $project->delete();
 
-        return redirect()->route('backend_project')->with('success', 'Xóa dự án thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.projects.index')->with('success', 'Xóa dự án thành công');
     }
 
     public function bulkDelete(Request $request)
@@ -174,6 +174,42 @@ class ProjectController extends Controller
         });
 
         return response()->json(['success' => true]);
+    }
+
+    public function approve(Project $project)
+    {
+        $user = auth('web')->user();
+
+        abort_unless($user?->is_super_admin || $user?->is_approve, 403, 'Bạn không có quyền duyệt dự án.');
+
+        if ($user->is_super_admin) {
+            $project->approval_level = $project->max_approval;
+            $project->status = 'approved';
+            $project->is_draft = false;
+        } elseif ($project->approval_level < 1) {
+            $project->approval_level = 1;
+            $project->status = 'pending';
+        }
+
+        $project->save();
+
+        return redirect()
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.projects.edit', $project)
+            ->with('success', 'Duyệt dự án thành công');
+    }
+
+    public function reject(Project $project)
+    {
+        $user = auth('web')->user();
+
+        abort_unless($user?->is_super_admin || $user?->is_approve, 403, 'Bạn không có quyền từ chối duyệt dự án.');
+
+        $project->status = 'rejected';
+        $project->save();
+
+        return redirect()
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.projects.index')
+            ->with('success', 'Yêu cầu chỉnh sửa dự án thành công');
     }
 
     public function exportCsv()

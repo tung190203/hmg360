@@ -35,7 +35,7 @@ class Group extends Model
         foreach (['edit', 'delete'] as $action) {
             if (Gate::allows('group/' . $action)) {
                 $options[$action] = [
-                    'route' => 'backend_group_' . $action,
+                    'route' => 'tenant.trung_tam_xuc_tien_ha_noi.user.groups.' . $action,
                 ];
             }
         }

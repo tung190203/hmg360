@@ -6,7 +6,7 @@
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('backend_popup') }}">Popup</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.popup.index') }}">Popup</a></li>
     <li class="breadcrumb-item active">{{ $popup->exists ? 'Sửa popup' : 'Thêm mới popup' }}</li>
 @endsection
 
@@ -28,11 +28,11 @@
                         @if($popup->exists)
                             @can('popup/add')
                                 <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                    url="{{ route('backend_popup_create') }}" />
+                                    url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.popup.create') }}" />
                             @endcan
                             @can('popup/delete')
                                 <x-forms.button-url title="Xóa" class="btn-danger" icon="fa fa-trash"
-                                    url="{{ route('backend_popup_delete', $popup->id) }}" />
+                                    url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.popup.delete', $popup->id) }}" />
                             @endcan
                             @if(
                                 (auth('web')->user()->is_super_admin || auth('web')->user()->is_approve) &&
@@ -64,11 +64,11 @@
                                                 </p>
                                             </div>
                                             <div class="modal-footer">
-                                                <form action="{{ route('backend_popup_reject', $popup->id) }}" method="post" class="d-inline">
+                                                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.popup.reject', $popup->id) }}" method="post" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-danger fw-bold">Yêu cầu chỉnh sửa</button>
                                                 </form>
-                                                <form action="{{ route('backend_popup_approve', $popup->id) }}" method="post" class="d-inline">
+                                                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.popup.approve', $popup->id) }}" method="post" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-success fw-bold">Duyệt popup</button>
                                                 </form>
@@ -82,7 +82,7 @@
                 </div>
             </div>
             <div class="card card-primary">
-                <form action="{{ route('backend_popup_save', $popup) }}" method="post" enctype="multipart/form-data"
+                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.popup.save', $popup) }}" method="post" enctype="multipart/form-data"
                     class="form-horizontal" id="formDataGrid">
                     @csrf
                     <div class="card-body">

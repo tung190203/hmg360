@@ -7,7 +7,7 @@ return [
     'menu' => [
         'title' => 'Dự án',
         'icon' => 'fas fa-project-diagram',
-        'route' => 'backend_project',
+        'route' => 'tenant.trung_tam_xuc_tien_ha_noi.projects.index',
         'section' => 'content',
         'sort_order' => 50,
     ],
@@ -15,7 +15,7 @@ return [
         'projects' => [
             'title' => 'Dự án',
             'icon' => 'fas fa-project-diagram',
-            'route' => 'backend_project',
+            'route' => 'tenant.trung_tam_xuc_tien_ha_noi.projects.index',
             'section' => 'content',
             'sort_order' => 50,
         ],

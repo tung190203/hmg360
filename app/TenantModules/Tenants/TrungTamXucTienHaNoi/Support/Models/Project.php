@@ -259,7 +259,7 @@ class Project extends Model
         foreach (['edit', 'delete'] as $action) {
             if (Gate::allows('project/' . $action)) {
                 $options[$action] = [
-                    'route' => 'backend_project_' . $action,
+                    'route' => 'tenant.trung_tam_xuc_tien_ha_noi.projects.' . $action,
                 ];
             }
         }

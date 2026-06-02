@@ -6,8 +6,8 @@
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('backend_user') }}">User</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('backend_group') }}">Group</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.user.users.index') }}">User</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.user.groups.index') }}">Group</a></li>
     <li class="breadcrumb-item active">{{ $group->exists ? 'Sửa group' : 'Thêm mới group' }}</li>
 @endsection
 
@@ -26,18 +26,18 @@
                         @if($group->exists)
                             @can('group/add')
                                 <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                                    url="{{ route('backend_group_create') }}"/>
+                                                    url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.user.groups.create') }}"/>
                             @endcan
                             @can('group/delete')
                                 <x-forms.button-url title="Xóa" class="btn-danger" icon="fa fa-trash"
-                                                    url="{{ route('backend_group_delete', $group->id) }}"/>
+                                                    url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.user.groups.delete', $group->id) }}"/>
                             @endcan
                         @endif
                     </div>
                 </div>
             </div>
             <div class="card card-primary">
-                <form action="{{ route('backend_group_save', $group) }}" method="post"
+                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.user.groups.save', $group) }}" method="post"
                       enctype="multipart/form-data"
                       class="form-horizontal" id="formDataGrid">
                     @csrf

@@ -26,7 +26,7 @@
             </div>
 
             <div class="card card-primary">
-                <form action="{{ route('backend_setting_save') }}" method="post" enctype="multipart/form-data"
+                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.setting.save') }}" method="post" enctype="multipart/form-data"
                     class="form-horizontal" id="formDataGrid">
                     @csrf
                     <div class="card-body">

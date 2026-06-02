@@ -56,7 +56,7 @@ class MenuController extends Controller
         $menus = $this->menu->showMenus($menu_raw);
         $option_positions = Util::makeHTMLOptions($this->types, $menu_type, 0, 0, 0);
 
-        $route_name = 'backend_menu_edit';
+        $route_name = 'tenant.trung_tam_xuc_tien_ha_noi.menu.edit';
 
         $clsDataGrid = new DataGrid();
         $clsDataGrid->setLinkEdit($route_name);
@@ -103,7 +103,7 @@ class MenuController extends Controller
         foreach ($update as $key => $value) {
             Menu::where('id', $key)->update($value);
         }
-        return redirect()->route('backend_menu')->with('success', 'Cập nhật thông tin thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.menu.index')->with('success', 'Cập nhật thông tin thành công');
     }
 
     public function edit(Request $request, Menu $menu)
@@ -244,7 +244,7 @@ class MenuController extends Controller
             }
 
             return redirect()
-                ->route('backend_menu_edit', $menu)
+                ->route('tenant.trung_tam_xuc_tien_ha_noi.menu.edit', $menu)
                 ->with('success', 'Lưu dữ liệu thành công ' . (
                     $user->is_super_admin ? '(Đã duyệt)' : ($user->is_approve ? '(Chờ duyệt cấp 2)' : '')
                 ));
@@ -293,7 +293,7 @@ class MenuController extends Controller
         $menu->save();
 
         return redirect()
-            ->route('backend_menu_edit', ['menu' => $menu->id])
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.menu.edit', ['menu' => $menu->id])
             ->with('success', 'Duyệt menu thành công ' . ($user->is_super_admin ? '(Đã duyệt)' : '(Chờ duyệt cấp 2)'));
     }
 
@@ -310,7 +310,7 @@ class MenuController extends Controller
         $menu->save();
 
         return redirect()
-            ->route('backend_menu')
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.menu.index')
             ->with('success', 'Từ chối duyệt menu thành công');
     }
 
@@ -321,7 +321,7 @@ class MenuController extends Controller
         }
 
         $this->menu->destroy($id);
-        return redirect()->route('backend_menu')->with('success', 'Xóa menu thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.menu.index')->with('success', 'Xóa menu thành công');
     }
 
     public function bulkDelete(Request $request)

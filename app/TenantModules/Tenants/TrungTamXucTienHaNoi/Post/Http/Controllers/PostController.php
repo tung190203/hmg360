@@ -79,7 +79,7 @@ class PostController extends Controller
         $option_categories = Category::makeArrayListCategory(0, Category::CATEGORY_TYPE_POST);
 
         $paginate = 20;
-        $route_name = 'backend_post_edit';
+        $route_name = 'tenant.trung_tam_xuc_tien_ha_noi.post.edit';
         $option_column_button = Post::makeOptionColumnButton();
 
         $clsDataGrid = new DataGrid();
@@ -128,7 +128,7 @@ class PostController extends Controller
         foreach ($update as $key => $value) {
             Post::where('id', $key)->update($value);
         }
-        return redirect()->route('backend_post')->with('success', 'Cập nhật thông tin thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.post.index')->with('success', 'Cập nhật thông tin thành công');
     }
 
     public function edit(Post $post)
@@ -459,7 +459,7 @@ class PostController extends Controller
             }
 
             return redirect()
-                ->route('backend_post_edit', $post)
+                ->route('tenant.trung_tam_xuc_tien_ha_noi.post.edit', $post)
                 ->with('success', 'Lưu dữ liệu thành công ' . (
                     $user->is_super_admin ? '(Đã duyệt)' : ($user->is_approve ? '(Chờ duyệt cấp 2)' : '')
                 ));
@@ -518,7 +518,7 @@ class PostController extends Controller
         $post->save();
 
         return redirect()
-            ->route('backend_post_edit', $post->id)
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.post.edit', $post->id)
             ->with('success', 'Duyệt bài viết thành công ' . ($user->is_super_admin ? '(Đã duyệt)' : '(Chờ duyệt cấp 2)'));
     }
 
@@ -534,7 +534,7 @@ class PostController extends Controller
         $post->save();
 
         return redirect()
-            ->route('backend_post')
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.post.index')
             ->with('success', 'Từ chối duyệt bài viết thành công');
     }
 
@@ -564,7 +564,7 @@ class PostController extends Controller
         }
 
         $this->post->destroy($id);
-        return redirect()->to(route('backend_post'))->with('success', 'Xóa thành công');
+        return redirect()->to(route('tenant.trung_tam_xuc_tien_ha_noi.post.index'))->with('success', 'Xóa thành công');
     }
 
     public function bulkDelete(Request $request)
@@ -592,7 +592,7 @@ class PostController extends Controller
 
         $post = Post::withTrashed()->findOrFail($id);
         $post->restore();
-        return redirect()->route('backend_post')->with('success', 'Khôi phục bài viết thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.post.index')->with('success', 'Khôi phục bài viết thành công');
     }
 
     public function forceDelete(Request $request, $id)
@@ -603,7 +603,7 @@ class PostController extends Controller
 
         $post = Post::withTrashed()->findOrFail($id);
         $post->forceDelete();
-        return redirect()->route('backend_post', 'status=2')->with('success', 'Xóa bài viết thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.post.index', 'status=2')->with('success', 'Xóa bài viết thành công');
     }
 
     public function showImportForm()
@@ -749,7 +749,7 @@ class PostController extends Controller
         ];
 
         return redirect()
-            ->route('backend_post_create')
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.post.create')
             ->withInput($data)
             ->with('success', 'Đã import dữ liệu thành công, vui lòng kiểm tra và lưu bài viết.');
     }

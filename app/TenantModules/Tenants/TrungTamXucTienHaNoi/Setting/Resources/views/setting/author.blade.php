@@ -25,12 +25,12 @@ Cấu hình tác giả
                 <div class="float-right mb-3">
                     <x-forms.button-save />
                     <x-forms.button-url title="Cancel" class="bg-gray-dark" icon="fas fa-undo"
-                        url="{{ route('backend_dashboard') }}" />
+                        url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.dashboard.index') }}" />
                 </div>
             </div>
         </div>
         <div class="card card-primary">
-            <form action="{{ route('backend_setting_save') }}" method="post"
+            <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.setting.save') }}" method="post"
                 enctype="multipart/form-data" class="form-horizontal" id="formDataGrid">
                 @csrf
                 <div class="card-body">

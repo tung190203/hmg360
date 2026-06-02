@@ -6,7 +6,7 @@
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('backend_menu') }}">Menu</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.menu.index') }}">Menu</a></li>
     <li class="breadcrumb-item active">{{ $menu->exists ? 'Sửa menu' : 'Thêm mới menu' }}</li>
 @endsection
 
@@ -32,11 +32,11 @@
                         @if($menu->exists)
                             @can('menu/add')
                                 <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                                    url="{{ route('backend_menu_create') }}"/>
+                                                    url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.menu.create') }}"/>
                             @endcan
                             @can('menu/delete')
                                 <x-forms.button-url title="Xóa" class="btn-danger" icon="fa fa-trash"
-                                                    url="{{ route('backend_menu_delete', $menu->id) }}"/>
+                                                    url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.menu.delete', $menu->id) }}"/>
                             @endcan
                             @if(
                                 (auth('web')->user()->is_super_admin || auth('web')->user()->is_approve) &&
@@ -66,11 +66,11 @@
                                                 </p>
                                             </div>
                                             <div class="modal-footer">
-                                                <form action="{{ route('backend_menu_reject', $menu->id) }}" method="post" class="d-inline">
+                                                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.menu.reject', $menu->id) }}" method="post" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-danger fw-bold">Yêu cầu chỉnh sửa</button>
                                                 </form>
-                                                <form action="{{ route('backend_menu_approve', $menu->id) }}" method="post" class="d-inline">
+                                                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.menu.approve', $menu->id) }}" method="post" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-success fw-bold">Duyệt menu</button>
                                                 </form>
@@ -84,7 +84,7 @@
                 </div>
             </div>
             <div class="card card-primary">
-                <form action="{{ route('backend_menu_save', $menu) }}" method="post"
+                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.menu.save', $menu) }}" method="post"
                       enctype="multipart/form-data"
                       class="form-horizontal" id="formDataGrid">
                     @csrf

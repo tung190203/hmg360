@@ -294,7 +294,7 @@ class Category extends Model
         foreach (['edit', 'delete'] as $action) {
             if (Gate::allows('category/' . $action)) {
                 $options[$action] = [
-                    'route' => 'backend_category_' . $action,
+                    'route' => 'tenant.trung_tam_xuc_tien_ha_noi.category.' . $action,
                 ];
             }
         }

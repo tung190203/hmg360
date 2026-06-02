@@ -77,7 +77,7 @@ class InvestMentGuideController extends Controller
         $option_categories = Category::makeArrayListCategory(0, Category::CATEGORY_TYPE_POST);
 
         $paginate = 20;
-        $route_name = 'backend_investment_guide_edit';
+        $route_name = 'tenant.trung_tam_xuc_tien_ha_noi.investment_guide.edit';
         $option_column_button = InvestmentGuide::makeOptionColumnButton();
 
         $clsDataGrid = new DataGrid();
@@ -127,7 +127,7 @@ class InvestMentGuideController extends Controller
         foreach ($update as $key => $value) {
             InvestmentGuide::where('id', $key)->update($value);
         }
-        return redirect()->route('backend_investment_guide')->with('success', 'Cập nhật thông tin thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.index')->with('success', 'Cập nhật thông tin thành công');
     }
 
     public function edit(InvestmentGuide $investment_guide)
@@ -472,7 +472,7 @@ public function save(InvestmentGuide $investment_guide, Request $request)
         }
 
         return redirect()
-            ->route('backend_investment_guide_edit', $investment_guide)
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.edit', $investment_guide)
             ->with('success', 'Lưu dữ liệu thành công ' . (
                 $user->is_super_admin ? '(Đã duyệt)' : ($user->is_approve ? '(Chờ duyệt cấp 2)' : '')
             ));
@@ -531,7 +531,7 @@ public function save(InvestmentGuide $investment_guide, Request $request)
         $investment_guide->save();
 
         return redirect()
-            ->route('backend_investment_guide_edit', $investment_guide->id)
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.edit', $investment_guide->id)
             ->with('success', 'Duyệt cẩm nang đầu tư thành công ' . ($user->is_super_admin ? '(Đã duyệt)' : '(Chờ duyệt cấp 2)'));
     }
 
@@ -547,7 +547,7 @@ public function save(InvestmentGuide $investment_guide, Request $request)
         $investment_guide->save();
 
         return redirect()
-            ->route('backend_investment_guide')
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.index')
             ->with('success', 'Từ chối duyệt cẩm nang đầu tư thành công');
     }
 
@@ -576,7 +576,7 @@ public function save(InvestmentGuide $investment_guide, Request $request)
         }
 
         $this->investment_guide->destroy($id);
-        return redirect()->to(route('backend_investment_guide'))->with('success', 'Xóa thành công');
+        return redirect()->to(route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.index'))->with('success', 'Xóa thành công');
     }
 
     public function bulkDelete(Request $request)
@@ -604,7 +604,7 @@ public function save(InvestmentGuide $investment_guide, Request $request)
 
         $investment_guide = InvestmentGuide::withTrashed()->findOrFail($id);
         $investment_guide->restore();
-        return redirect()->route('backend_investment_guide')->with('success', 'Khôi phục bài viết thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.index')->with('success', 'Khôi phục bài viết thành công');
     }
 
     public function forceDelete(Request $request, $id)
@@ -615,7 +615,7 @@ public function save(InvestmentGuide $investment_guide, Request $request)
 
         $investment_guide = InvestmentGuide::withTrashed()->findOrFail($id);
         $investment_guide->forceDelete();
-        return redirect()->route('backend_investment_guide', 'status=2')->with('success', 'Xóa bài viết thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.index', 'status=2')->with('success', 'Xóa bài viết thành công');
     }
 
     public function showImportForm()
@@ -767,7 +767,7 @@ public function save(InvestmentGuide $investment_guide, Request $request)
         ];
 
         return redirect()
-            ->route('backend_investment_guide_create')
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.create')
             ->withInput($data)
             ->with('success', 'Import nội dung từ URL thành công.');
     }

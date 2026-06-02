@@ -127,7 +127,7 @@ class HotspotController extends Controller
                 $html .= '<td>' . $hp->tooltip . '</td>';
                 $html .= '<td>' . $hp->opacity . '</td>';
                 $html .= '<td class="grid_row1">';
-                $html .= '<a class="btn btn-info btn-sm mr-1" href="' . route('backend_vrtour_hotspot_edit', $hp->id) . '" title="Chỉnh sửa"><i class="fas fa-pencil-alt"></i></a>';
+                $html .= '<a class="btn btn-info btn-sm mr-1" href="' . route('tenant.trung_tam_xuc_tien_ha_noi.vr_tour.hotspot.edit', $hp->id) . '" title="Chỉnh sửa"><i class="fas fa-pencil-alt"></i></a>';
                 $html .= '</td>';
                 $html .= '</tr>';
             }
@@ -195,6 +195,6 @@ class HotspotController extends Controller
             );
         }
         file_put_contents('vrtour/' . Project::find($new_hp->vrtour_id)->vrtour_code . '/hotspot.js', Hotspot::where('vrtour_id', $new_hp->vrtour_id)->get());
-        return redirect()->to(route('backend_vrtour_hotspot_index') . '?vrtour=' . $new_hp->vrtour_id . '&type=' . ($new_hp->type == 3 ? 1 : 0))->with('success', 'Cập nhật thông tin thành công');
+        return redirect()->to(route('tenant.trung_tam_xuc_tien_ha_noi.vr_tour.hotspot.index') . '?vrtour=' . $new_hp->vrtour_id . '&type=' . ($new_hp->type == 3 ? 1 : 0))->with('success', 'Cập nhật thông tin thành công');
     }
 }

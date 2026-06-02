@@ -55,15 +55,15 @@
                         @endcan
                         @can('investment_guide/add')
                             <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                                url="{{ route('backend_investment_guide_create') }}"/>
+                                                url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.create') }}"/>
                         @endcan
                         @can('investment_guide/delete')
-                            <x-forms.button-bulk-delete url="{{ route('backend_investment_guide_bulk_delete')}}"/>
+                            <x-forms.button-bulk-delete url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.bulk_delete')}}"/>
                         @endcan
                     </div>
                 </div>
             </div>
-            <form method="investment_guide" action="{{ route('backend_investment_guide_save_data_index') }}" id="formDataGrid">
+            <form method="investment_guide" action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.save_data_index') }}" id="formDataGrid">
                 {{ csrf_field() }}
                 <div class="row">
                     <div class="col-12">

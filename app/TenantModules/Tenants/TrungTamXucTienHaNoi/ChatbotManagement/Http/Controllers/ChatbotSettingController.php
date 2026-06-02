@@ -22,7 +22,7 @@ class ChatbotSettingController extends Controller
 
     public function index()
     {
-        return redirect()->route('backend_chatbot_basic');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.chatbot_management.settings.basic');
     }
 
     private function renderTab(string $tab)

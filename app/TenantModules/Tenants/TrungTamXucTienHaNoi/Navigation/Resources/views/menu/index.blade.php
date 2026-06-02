@@ -40,15 +40,15 @@
                         @endcan
                         {{-- @can('menu/add')
                             <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                                url="{{ route('backend_menu_create') }}"/>
+                                                url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.menu.create') }}"/>
                         @endcan --}}
                         @can('menu/delete')
-                            <x-forms.button-bulk-delete url="{{ route('backend_menu_bulk_delete')}}"/>
+                            <x-forms.button-bulk-delete url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.menu.bulk_delete')}}"/>
                         @endcan
                     </div>
                 </div>
             </div>
-            <form method="post" action="{{ route('backend_menu_save_data_index') }}" id="formDataGrid">
+            <form method="post" action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.menu.save_data_index') }}" id="formDataGrid">
                 {{ csrf_field() }}
                 <div class="row">
                     <div class="col-12">

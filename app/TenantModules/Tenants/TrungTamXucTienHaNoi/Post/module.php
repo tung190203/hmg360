@@ -7,7 +7,7 @@ return [
     'menu' => [
         'title' => 'Tin tức',
         'icon' => 'fas fa-newspaper',
-        'route' => 'backend_post',
+        'route' => 'tenant.trung_tam_xuc_tien_ha_noi.post.index',
         'section' => 'content',
         'sort_order' => 30,
     ],

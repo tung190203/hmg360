@@ -25,7 +25,7 @@
                     <div class="float-right mb-3">
                         @can('user/add')
                             <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                                url="{{ route('backend_user_create') }}"/>
+                                                url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.user.users.create') }}"/>
                         @endcan
                     </div>
                 </div>

@@ -5,7 +5,7 @@
 @endsection
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('backend_guest') }}">người dùng</a></li>
+<li class="breadcrumb-item"><a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.guest.index') }}">người dùng</a></li>
 <li class="breadcrumb-item active">{{ $guest->exists ? 'Sửa thông tin' : 'Thêm mới' }}</li>
 @endsection
 
@@ -37,16 +37,16 @@
                             @if($guest->exists)
                             @can('guest')
                             <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                url="{{ route('backend_guest_create') }}" />
+                                url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.guest.create') }}" />
                             @endcan
                             @can('guest')
                             <x-forms.button-url title="Xóa" class="btn-danger" icon="fa fa-trash"
-                                url="{{ route('backend_guest_delete', $guest->id) }}" />
+                                url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.guest.delete', $guest->id) }}" />
                             @endcan
                             @endif
                         </div>
                     </div>
-                    <form action="{{ route('backend_guest_save', $guest) }}" method="post"
+                    <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.guest.save', $guest) }}" method="post"
                         enctype="multipart/form-data"
                         class="form-horizontal" id="formDataGrid">
                         @csrf
@@ -128,7 +128,7 @@
                         </div>
                         <div class="card-footer text-right bg-white p-3">
                             <x-forms.button-save title="Lưu thông tin" />
-                            <a href="{{ route('backend_guest') }}" class="btn btn-default btn-sm ml-2">Huỷ bỏ</a>
+                            <a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.guest.index') }}" class="btn btn-default btn-sm ml-2">Huỷ bỏ</a>
                         </div>
                     </form>
                 </div>

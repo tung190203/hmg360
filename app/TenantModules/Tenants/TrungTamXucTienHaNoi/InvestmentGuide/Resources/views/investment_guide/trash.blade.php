@@ -20,11 +20,11 @@
             <td>{{ $investment_guide->created_at }}</td>
             <td>{{ $investment_guide->deleted_at }}</td>
             <td>
-                <a class="btn btn-success btn-sm" href="{{ route('backend_investment_guide_restore', $investment_guide->id) }}"
+                <a class="btn btn-success btn-sm" href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.restore', $investment_guide->id) }}"
                    title="Khôi phục">
                     <i class="fas fa-trash-restore"></i>
                 </a>
-                <a class="btn btn-danger btn-sm" href="{{ route('backend_investment_guide_force_delete', $investment_guide->id) }}"
+                <a class="btn btn-danger btn-sm" href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.force_delete', $investment_guide->id) }}"
                    title="Xóa vĩnh viễn">
                     <i class="fas fa-trash"></i>
                 </a>

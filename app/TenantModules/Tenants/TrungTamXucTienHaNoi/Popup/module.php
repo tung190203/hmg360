@@ -7,7 +7,7 @@ return [
     'menu' => [
         'title' => 'Popup',
         'icon' => 'fas fa-window-restore',
-        'route' => 'backend_popup',
+        'route' => 'tenant.trung_tam_xuc_tien_ha_noi.popup.index',
         'section' => 'content',
         'sort_order' => 70,
     ],

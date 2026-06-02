@@ -84,7 +84,7 @@ class ContentController extends Controller
                 <td>' . mb_substr($content, 0, 100, "UTF-8") . '...</td>
                 <td class="grid_row1">
                     <a class="btn btn-info btn-sm mr-1"
-                        href="' . route('backend_vrtour_content_edit', $pn->id) . '"
+                        href="' . route('tenant.trung_tam_xuc_tien_ha_noi.vr_tour.content.edit', $pn->id) . '"
                         title="Chỉnh sửa">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
@@ -128,6 +128,6 @@ class ContentController extends Controller
         $new_pano->user_id       = Auth::id();
         $new_pano->save();
         file_put_contents('vrtour/'.Project::find($new_pano->vrtour_id)->vrtour_code.'/pano.js', Panorama::where('vrtour_id', $new_pano->vrtour_id)->get());
-        return redirect()->to(route('backend_vrtour_content_index') . '?vrtour='.$new_pano->vrtour_id)->with('success', 'Cập nhật thông tin thành công');
+        return redirect()->to(route('tenant.trung_tam_xuc_tien_ha_noi.vr_tour.content.index') . '?vrtour='.$new_pano->vrtour_id)->with('success', 'Cập nhật thông tin thành công');
     }
 }

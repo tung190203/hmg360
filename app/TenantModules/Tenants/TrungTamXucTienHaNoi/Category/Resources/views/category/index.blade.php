@@ -47,15 +47,15 @@
                         @endcan
                         {{-- @can('category/add')
                             <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                                url="{{ route('backend_category_create') }}"/>
+                                                url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.category.create') }}"/>
                         @endcan --}}
                         @can('category/delete')
-                            <x-forms.button-bulk-delete url="{{ route('backend_category_bulk_delete')}}"/>
+                            <x-forms.button-bulk-delete url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.category.bulk_delete')}}"/>
                         @endcan
                     </div>
                 </div>
             </div>
-            <form method="post" action="{{ route('backend_category_save_data_index') }}" id="formDataGrid">
+            <form method="post" action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.category.save_data_index') }}" id="formDataGrid">
                 {{ csrf_field() }}
                 <div class="row">
                     <div class="col-12">

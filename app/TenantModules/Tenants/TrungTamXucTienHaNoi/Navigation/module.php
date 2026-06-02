@@ -7,7 +7,7 @@ return [
     'menu' => [
         'title' => 'Navigation',
         'icon' => 'fas fa-bars',
-        'route' => 'backend_menu',
+        'route' => 'tenant.trung_tam_xuc_tien_ha_noi.menu.index',
         'section' => 'content',
         'sort_order' => 80,
     ],

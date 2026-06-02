@@ -77,19 +77,19 @@
                         @endcan
                         @can('project/add')
                             <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                                url="{{ route('backend_project_create') }}"/>
+                                                url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.create') }}"/>
                         @endcan
                         @can('project/delete')
-                            <x-forms.button-bulk-delete url="{{ route('backend_project_bulk_delete')}}"/>
+                            <x-forms.button-bulk-delete url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.bulk_delete')}}"/>
                         @endcan
                         @can('project/export')
                         <x-forms.button-url title="Xuất báo cáo" class="btn-success" icon="fa fa-file-export"
-                                                url="{{ route('backend_project_export') }}"/>
+                                                url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.export') }}"/>
                         @endcan
                     </div>
                 </div>
             </div>
-            <form method="post" action="{{ route('backend_project_save_data_index') }}" id="formDataGrid">
+            <form method="post" action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.save_data_index') }}" id="formDataGrid">
                 {{ csrf_field() }}
                 <div class="row">
                     <div class="col-12">

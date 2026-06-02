@@ -324,7 +324,7 @@ class InvestmentGuide extends Model
         foreach (['edit', 'delete', 'clone'] as $action) {
             if (Gate::allows('investment_guide/' . $action)) {
                 $options[$action] = [
-                    'route' => 'backend_investment_guide_' . $action,
+                    'route' => 'tenant.trung_tam_xuc_tien_ha_noi.investment_guide.' . $action,
                 ];
             }
         }

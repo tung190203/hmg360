@@ -6,7 +6,7 @@
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('backend_user') }}">User</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.user.users.index') }}">User</a></li>
     <li class="breadcrumb-item active">{{ $user->exists ? 'Sửa user' : 'Thêm mới user' }}</li>
 @endsection
 
@@ -28,11 +28,11 @@
                         @if($user->exists)
                             @can('user/add')
                                 <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                                    url="{{ route('backend_user_create') }}"/>
+                                                    url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.user.users.create') }}"/>
                             @endcan
                             @can('user/delete')
                                 <x-forms.button-url title="Xóa" class="btn-danger" icon="fa fa-trash"
-                                                    url="{{ route('backend_user_delete', $user->id) }}"/>
+                                                    url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.user.users.delete', $user->id) }}"/>
                             @endcan
                             @if(
                                 (auth('web')->user()->is_super_admin || auth('web')->user()->is_approve) &&
@@ -64,11 +64,11 @@
                                                 </p>
                                             </div>
                                             <div class="modal-footer">
-                                                <form action="{{ route('backend_user_reject', $user->id) }}" method="post" class="d-inline">
+                                                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.user.users.reject', $user->id) }}" method="post" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-danger fw-bold">Yêu cầu chỉnh sửa</button>
                                                 </form>
-                                                <form action="{{ route('backend_user_approve', $user->id) }}" method="post" class="d-inline">
+                                                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.user.users.approve', $user->id) }}" method="post" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-success fw-bold">Duyệt user</button>
                                                 </form>
@@ -82,7 +82,7 @@
                 </div>
             </div>
             <div class="card card-primary">
-                <form action="{{ route('backend_user_save', $user) }}" method="post"
+                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.user.users.save', $user) }}" method="post"
                       enctype="multipart/form-data"
                       class="form-horizontal" id="formDataGrid">
                     @csrf

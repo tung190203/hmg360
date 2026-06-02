@@ -323,7 +323,7 @@ class Post extends Model
         foreach (['edit', 'delete', 'clone'] as $action) {
             if (Gate::allows('post/' . $action)) {
                 $options[$action] = [
-                    'route' => 'backend_post_' . $action,
+                    'route' => 'tenant.trung_tam_xuc_tien_ha_noi.post.' . $action,
                 ];
             }
         }

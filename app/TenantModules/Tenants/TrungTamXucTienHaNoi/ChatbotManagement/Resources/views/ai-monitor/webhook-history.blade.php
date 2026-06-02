@@ -35,7 +35,7 @@ Lịch sử nhận webhook
     <div class="container-fluid">
         <div class="card webhook-card mb-3">
             <div class="card-body">
-                <form method="GET" action="{{ route('backend_chatbot_webhooks') }}">
+                <form method="GET" action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.chatbot_management.ai_monitor.webhooks') }}">
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group mb-md-0">

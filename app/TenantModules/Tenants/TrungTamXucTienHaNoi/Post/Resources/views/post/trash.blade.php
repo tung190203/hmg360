@@ -20,11 +20,11 @@
             <td>{{ $post->created_at }}</td>
             <td>{{ $post->deleted_at }}</td>
             <td>
-                <a class="btn btn-success btn-sm" href="{{ route('backend_post_restore', $post->id) }}"
+                <a class="btn btn-success btn-sm" href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.post.restore', $post->id) }}"
                    title="Khôi phục">
                     <i class="fas fa-trash-restore"></i>
                 </a>
-                <a class="btn btn-danger btn-sm" href="{{ route('backend_post_force_delete', $post->id) }}"
+                <a class="btn btn-danger btn-sm" href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.post.force_delete', $post->id) }}"
                    title="Xóa vĩnh viễn">
                     <i class="fas fa-trash"></i>
                 </a>

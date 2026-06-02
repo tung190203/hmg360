@@ -6,7 +6,7 @@
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('backend_project') }}">Dự án</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.index') }}">Dự án</a></li>
     <li class="breadcrumb-item active"> {{ $project->exists ? 'Sửa dự án' : 'Thêm mới dự án' }}</li>
 @endsection
 
@@ -36,11 +36,11 @@
                         @if ($project->exists)
                             @can('project/add')
                                 <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                    url="{{ route('backend_project_create') }}" />
+                                    url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.create') }}" />
                             @endcan
                             @can('project/delete')
                                 <x-forms.button-url title="Xóa" class="btn-danger" icon="fa fa-trash"
-                                    url="{{ route('backend_project_delete', $project->id) }}" />
+                                    url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.delete', $project->id) }}" />
                             @endcan
                             @if(
                                 (auth('web')->user()->is_super_admin || auth('web')->user()->is_approve) &&
@@ -70,11 +70,11 @@
                                                 </p>
                                             </div>
                                             <div class="modal-footer">
-                                                <form action="{{ route('backend_project_reject', $project->id) }}" method="post" class="d-inline">
+                                                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.reject', $project->id) }}" method="post" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-danger fw-bold">Yêu cầu chỉnh sửa</button>
                                                 </form>
-                                                <form action="{{ route('backend_project_approve', $project->id) }}" method="post" class="d-inline">
+                                                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.approve', $project->id) }}" method="post" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-success fw-bold">Duyệt dự án</button>
                                                 </form>
@@ -88,7 +88,7 @@
                 </div>
             </div>
             <div class="card card-primary">
-                <form action="{{ route('backend_project_save', $project) }}" method="post" enctype="multipart/form-data"
+                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.save', $project) }}" method="post" enctype="multipart/form-data"
                     class="form-horizontal" id="formDataGrid">
                     @csrf
                     <div class="card-body">

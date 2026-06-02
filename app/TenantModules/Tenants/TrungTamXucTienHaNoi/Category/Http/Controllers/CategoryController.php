@@ -61,7 +61,7 @@ class CategoryController extends Controller
         $option_column_button = Category::makeOptionColumnButton();
 
         $clsDataGrid = new DataGrid();
-        $clsDataGrid->setLinkEdit('backend_category_edit');
+        $clsDataGrid->setLinkEdit('tenant.trung_tam_xuc_tien_ha_noi.category.edit');
         $clsDataGrid->addColumnLabel("name", "Name", "width='10%' nowrap", 1, '', function ($col, $val, $id, $row) {
             $html = $row->name;
     
@@ -113,7 +113,7 @@ class CategoryController extends Controller
         foreach ($update as $key => $value) {
             Category::where('id', $key)->update($value);
         }
-        return redirect()->route('backend_category')->with('success', 'Cập nhật thông tin thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.category.index')->with('success', 'Cập nhật thông tin thành công');
     }
 
     public function edit(Request $request, Category $category)
@@ -320,7 +320,7 @@ class CategoryController extends Controller
             }
 
             return redirect()
-                ->route('backend_category_edit', $category)
+                ->route('tenant.trung_tam_xuc_tien_ha_noi.category.edit', $category)
                 ->with('success', 'Lưu dữ liệu thành công ' . (
                     $user->is_super_admin ? '(Đã duyệt)' : ($user->is_approve ? '(Chờ duyệt cấp 2)' : '')
                 ));
@@ -380,7 +380,7 @@ class CategoryController extends Controller
         $category->save();
 
         return redirect()
-            ->route('backend_category_edit', ['category' => $category->id])
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.category.edit', ['category' => $category->id])
             ->with('success', 'Duyệt danh mục thành công ' . ($user->is_super_admin ? '(Đã duyệt)' : '(Chờ duyệt cấp 2)'));
     }
 
@@ -397,7 +397,7 @@ class CategoryController extends Controller
         $category->save();
 
         return redirect()
-            ->route('backend_category')
+            ->route('tenant.trung_tam_xuc_tien_ha_noi.category.index')
             ->with('success', 'Từ chối duyệt danh mục thành công');
     }
 
@@ -408,7 +408,7 @@ class CategoryController extends Controller
         }
 
         $this->category->destroy($id);
-        return redirect()->route('backend_category')->with('success', 'Xóa danh mục thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.category.index')->with('success', 'Xóa danh mục thành công');
     }
 
     public function bulkDelete(Request $request)

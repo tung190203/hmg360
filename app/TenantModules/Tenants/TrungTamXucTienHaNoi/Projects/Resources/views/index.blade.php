@@ -13,7 +13,7 @@
     <div class="container-fluid">
         <div class="row align-items-start">
             <div class="col-xl-8">
-                <form action="{{ route('backend_project') }}" method="GET" class="form-filter-top-index">
+                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.index') }}" method="GET" class="form-filter-top-index">
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -62,17 +62,17 @@
                         <x-forms.button-save />
                     @endif
                     @if($canCreate)
-                        <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus" url="{{ route('backend_project_create') }}" />
+                        <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus" url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.create') }}" />
                     @endif
                     @if($canDelete)
-                        <x-forms.button-bulk-delete url="{{ route('backend_project_bulk_delete') }}" />
+                        <x-forms.button-bulk-delete url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.bulk_delete') }}" />
                     @endif
-                    <x-forms.button-url title="Xuất báo cáo" class="btn-success" icon="fa fa-file-export" url="{{ route('backend_project_export') }}" />
+                    <x-forms.button-url title="Xuất báo cáo" class="btn-success" icon="fa fa-file-export" url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.export') }}" />
                 </div>
             </div>
         </div>
 
-        <form method="post" action="{{ route('backend_project_save_data_index') }}" id="formDataGrid">
+        <form method="post" action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.save_data_index') }}" id="formDataGrid">
             @csrf
             <div class="card">
                 <div class="card-body table-responsive p-0">
@@ -100,7 +100,7 @@
                                     <td>{{ $projects->firstItem() + $loop->index }}</td>
                                     <td><input type="checkbox" class="checker" value="{{ $project->id }}"></td>
                                     <td>
-                                        <a href="{{ route('backend_project_edit', $project) }}">{{ $project->name }}</a>
+                                        <a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.edit', $project) }}">{{ $project->name }}</a>
                                         @if($project->is_draft)
                                             <span class="badge bg-warning">Bản chỉnh sửa</span>
                                         @endif
@@ -133,12 +133,12 @@
                                     <td>{{ optional($project->created_at)->format('d-m-Y') }}</td>
                                     <td>
                                         @if($canUpdate)
-                                            <a class="btn btn-info btn-sm mr-1" href="{{ route('backend_project_edit', $project) }}" title="Chỉnh sửa">
+                                            <a class="btn btn-info btn-sm mr-1" href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.edit', $project) }}" title="Chỉnh sửa">
                                                 <i class="fas fa-pencil-alt"></i>
                                             </a>
                                         @endif
                                         @if($canDelete)
-                                            <a class="btn btn-danger btn-sm" href="{{ route('backend_project_delete', $project) }}" title="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xóa dự án này?')">
+                                            <a class="btn btn-danger btn-sm" href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.projects.delete', $project) }}" title="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xóa dự án này?')">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         @endif

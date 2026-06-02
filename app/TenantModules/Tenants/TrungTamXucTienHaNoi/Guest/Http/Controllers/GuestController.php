@@ -49,7 +49,7 @@ class GuestController extends Controller
         $guests = $query->paginate(25);
 
         $clsDataGrid = new DataGrid();
-        $clsDataGrid->setLinkEdit('backend_guest_edit');
+        $clsDataGrid->setLinkEdit('tenant.trung_tam_xuc_tien_ha_noi.guest.edit');
         $clsDataGrid->addColumnImage("avatar_url", "Avatar", "width=50px height=50px");
         $clsDataGrid->addColumnLabel("name", "Name", "width='15%' nowrap");
         $clsDataGrid->addColumnLabel("email", "Email", "width='15%' nowrap");
@@ -62,8 +62,8 @@ class GuestController extends Controller
         $clsDataGrid->addColumnDate("created_at", "Ngày tạo", "width='10%' nowrap ", 'd-m-Y');
 
         $option_column_button = [
-            'edit' => ['title' => 'Sửa', 'icon' => 'fa fa-edit', 'class' => 'btn-primary', 'route' => 'backend_guest_edit'],
-            'delete' => ['title' => 'Xóa', 'icon' => 'fa fa-trash', 'class' => 'btn-danger', 'route' => 'backend_guest_delete'],
+            'edit' => ['title' => 'Sửa', 'icon' => 'fa fa-edit', 'class' => 'btn-primary', 'route' => 'tenant.trung_tam_xuc_tien_ha_noi.guest.edit'],
+            'delete' => ['title' => 'Xóa', 'icon' => 'fa fa-trash', 'class' => 'btn-danger', 'route' => 'tenant.trung_tam_xuc_tien_ha_noi.guest.delete'],
         ];
         $clsDataGrid->addColumnButton('id', '&nbsp', $option_column_button, "width='10%' nowrap ");
 
@@ -78,7 +78,7 @@ class GuestController extends Controller
         foreach ($update as $key => $value) {
             $this->guest->where('id', $key)->update($value);
         }
-        return redirect()->route('backend_guest')->with('success', 'Cập nhật thông tin thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.guest.index')->with('success', 'Cập nhật thông tin thành công');
     }
 
     public function edit(Request $request, Guest $guest)
@@ -130,7 +130,7 @@ class GuestController extends Controller
         $guest->fill($data);
         $guest->save();
 
-        return redirect()->route('backend_guest_edit', $guest->id)->with('success', 'Lưu thông tin thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.guest.edit', $guest->id)->with('success', 'Lưu thông tin thành công');
     }
 
     public function delete(Request $request, $id)
@@ -139,7 +139,7 @@ class GuestController extends Controller
             abort(403, self::MESSAGE_UNAUTHORIZED);
         }
         $this->guest->destroy($id);
-        return redirect()->route('backend_guest')->with('success', 'Xóa thành công');
+        return redirect()->route('tenant.trung_tam_xuc_tien_ha_noi.guest.index')->with('success', 'Xóa thành công');
     }
 
     public function bulkDelete(Request $request)

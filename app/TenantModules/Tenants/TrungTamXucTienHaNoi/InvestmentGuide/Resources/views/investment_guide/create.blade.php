@@ -6,7 +6,7 @@
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('backend_investment_guide') }}">Cẩm nang đầu tư</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.index') }}">Cẩm nang đầu tư</a></li>
     <li class="breadcrumb-item active">{{ $investment_guide->exists ? 'Sửa cẩm nang đầu tư' : 'Thêm mới cẩm nang đầu tư' }}</li>
 @endsection
 
@@ -31,16 +31,16 @@
                         @endcan
                         @can('investment_guide/import')
                             <x-forms.button-url title="Tạo từ link" class="btn-warning text-white" icon="fa fa-link"
-                                                url="{{ route('backend_investment_guide_show_import_form') }}"/>
+                                                url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.show_import_form') }}"/>
                         @endcan
                         @if($investment_guide->exists)
                             @can('investment_guide/add')
                                 <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                                    url="{{ route('backend_investment_guide_create') }}"/>
+                                                    url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.create') }}"/>
                             @endcan
                             @can('investment_guide/delete')
                                 <x-forms.button-url title="Xóa" class="btn-danger" icon="fa fa-trash"
-                                                    url="{{ route('backend_investment_guide_delete', $investment_guide->id) }}"/>
+                                                    url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.delete', $investment_guide->id) }}"/>
                             @endcan
                             @if(
                                 (auth('web')->user()->is_super_admin || auth('web')->user()->is_approve) &&
@@ -70,11 +70,11 @@
                                                 </p>
                                             </div>
                                             <div class="modal-footer">
-                                                <form action="{{ route('backend_investment_guide_reject', $investment_guide->id) }}" method="post" class="d-inline">
+                                                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.reject', $investment_guide->id) }}" method="post" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-danger fw-bold">Yêu cầu chỉnh sửa</button>
                                                 </form>
-                                                <form action="{{ route('backend_investment_guide_approve', $investment_guide->id) }}" method="post" class="d-inline">
+                                                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.approve', $investment_guide->id) }}" method="post" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-success fw-bold">Duyệt cẩm nang đầu tư</button>
                                                 </form>
@@ -88,7 +88,7 @@
                 </div>
             </div>
             <div class="card card-primary">
-                <form action="{{ route('backend_investment_guide_save', $investment_guide) }}" method="post"
+                <form action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.investment_guide.save', $investment_guide) }}" method="post"
                       enctype="multipart/form-data"
                       class="form-horizontal" id="formDataGrid">
                     @csrf

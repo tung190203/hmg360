@@ -21,15 +21,15 @@
                         @endcan
                         @can('popup/add')
                             <x-forms.button-url title="Thêm mới" class="btn-info" icon="fa fa-plus"
-                                                url="{{ route('backend_popup_create') }}"/>
+                                                url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.popup.create') }}"/>
                         @endcan
                         @can('popup/delete')
-                            <x-forms.button-bulk-delete url="{{ route('backend_popup_bulk_delete')}}"/>
+                            <x-forms.button-bulk-delete url="{{ route('tenant.trung_tam_xuc_tien_ha_noi.popup.bulk_delete')}}"/>
                         @endcan
                     </div>
                 </div>
             </div>
-            <form method="post" action="{{ route('backend_popup_save_data_index') }}" id="formDataGrid">
+            <form method="post" action="{{ route('tenant.trung_tam_xuc_tien_ha_noi.popup.save_data_index') }}" id="formDataGrid">
                 {{ csrf_field() }}
                 <div class="row">
                     <div class="col-12">
