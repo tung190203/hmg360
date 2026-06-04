@@ -227,12 +227,27 @@
             headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
         });
 
+        const skinGetDataUrl = @json(route('tenant.trung_tam_xuc_tien_ha_noi.vr_tour.skin.getdata', ['vrtour_id' => '__VRTOUR__', 'type' => '__TYPE__']));
+        const skinUpdateDataUrl = @json(route('tenant.trung_tam_xuc_tien_ha_noi.vr_tour.skin.updatedata', ['vrtour_id' => '__VRTOUR__']));
+
+        function buildSkinGetDataUrl(vrtour, type) {
+            return skinGetDataUrl
+                .replace('__VRTOUR__', encodeURIComponent(vrtour))
+                .replace('__TYPE__', encodeURIComponent(type));
+        }
+
+        function buildSkinUpdateDataUrl(vrtour, type) {
+            const url = new URL(skinUpdateDataUrl.replace('__VRTOUR__', encodeURIComponent(vrtour)), window.location.origin);
+            url.searchParams.set('type', type);
+            return url.toString();
+        }
+
         function fetch_data() {
             var vrtour  = $('#slt_vrtour').val();
             var type    = $('#slt_vrtour_type').val();
             if (vrtour != 'all') {
                 $.ajax({
-                    url: assetUrl+'vrtour/skin/get-data/'+vrtour+'/'+type,
+                    url: buildSkinGetDataUrl(vrtour, type),
                     type: "GET",
                     success: function(response) {
                         $('#update_all').show();
@@ -428,7 +443,7 @@
             };
 
             $.ajax({
-                url: assetUrl + 'vrtour/skin/update-data/' + vrtour+'?type='+type,
+                url: buildSkinUpdateDataUrl(vrtour, type),
                 type: "POST",
                 contentType: "application/json",
                 dataType: "json",                

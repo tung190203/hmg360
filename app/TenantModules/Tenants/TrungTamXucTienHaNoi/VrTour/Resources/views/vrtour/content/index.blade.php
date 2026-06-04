@@ -91,13 +91,21 @@
             }
         });
 
+        const contentGetDataUrl = @json(route('tenant.trung_tam_xuc_tien_ha_noi.vr_tour.content.getdata', ['vrtour_id' => '__VRTOUR__']));
+
+        function buildContentGetDataUrl(vrtour, reset) {
+            const url = new URL(contentGetDataUrl.replace('__VRTOUR__', encodeURIComponent(vrtour)), window.location.origin);
+            url.searchParams.set('reset', reset);
+            return url.toString();
+        }
+
         function renderTable(notify = true,reset = false)
         {
             
             var vrtour  = $('#slt_vrtour').val();
             if (vrtour != 'all') {
                 $.ajax({
-                    url: assetUrl+'vrtour/content/get-data/'+vrtour + '?reset='+reset,
+                    url: buildContentGetDataUrl(vrtour, reset),
                     type: "GET",
                     success: function(response) {
                         $('#dataGrid').html(response.data);

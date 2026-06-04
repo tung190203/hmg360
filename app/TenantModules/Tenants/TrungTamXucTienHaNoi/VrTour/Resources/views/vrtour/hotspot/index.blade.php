@@ -103,13 +103,22 @@
             renderTable();
         });
 
+        const hotspotGetDataUrl = @json(route('tenant.trung_tam_xuc_tien_ha_noi.vr_tour.hotspot.get_hotspot', ['id' => '__VRTOUR__']));
+
+        function buildHotspotGetDataUrl(vrtour, type, reset) {
+            const url = new URL(hotspotGetDataUrl.replace('__VRTOUR__', encodeURIComponent(vrtour)), window.location.origin);
+            url.searchParams.set('type', type);
+            url.searchParams.set('reset', reset);
+            return url.toString();
+        }
+
         function renderTable(notify = true, reset = false)
         {
             var vrtour  = $('#slt_vrtour').val();
             var type    = $('#slt_vrtour_type').val();
             if (vrtour != 'all') {
                 $.ajax({
-                    url: assetUrl+'vrtour/hotspot/get-hotspot/'+vrtour+'?type='+type+'&reset='+reset,
+                    url: buildHotspotGetDataUrl(vrtour, type, reset),
                     type: "GET",
                     success: function(response) {
                         $('#dataGrid').html(response.data);
