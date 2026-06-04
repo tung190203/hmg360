@@ -14,7 +14,7 @@ class ContentController extends Controller
 {
     public function __construct()
     {
-        $this->selectedMainMenu = 'vr_tour';
+        $this->selectedMainMenu = 'vr-tour';
         $this->selectedSubMenu('content');
         parent::__construct();
 

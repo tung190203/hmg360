@@ -22,7 +22,7 @@ class HotspotController extends Controller
     public function __construct(Hotspot $hotspot)
     {
         $this->hotspot = $hotspot;
-        $this->selectedMainMenu = 'vr_tour';
+        $this->selectedMainMenu = 'vr-tour';
         $this->selectedSubMenu('hotspot');
         parent::__construct();
 
